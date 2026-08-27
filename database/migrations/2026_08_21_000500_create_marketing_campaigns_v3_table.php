@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (!Schema::hasTable('marketing_campaigns_v3')) {
+            Schema::create('marketing_campaigns_v3', function (Blueprint $table) {
+                $table->id();
+                $table->string('campaign_code')->default('MKT-CMP-153-9942');
+                $table->integer('active_campaigns_count')->default(384);
+                $table->string('status')->default('MARKETING_CAMPAIGNS_ACTIVE');
+                $table->timestamps();
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('marketing_campaigns_v3');
+    }
+};

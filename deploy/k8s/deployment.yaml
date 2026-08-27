@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brandzo-erp-deployment
+  namespace: brandzo-production
+  labels:
+    app: brandzo-erp
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: brandzo-erp
+  template:
+    metadata:
+      labels:
+        app: brandzo-erp
+    spec:
+      containers:
+      - name: brandzo-erp
+        image: registry.brandzo.in/brandzo-erp:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 250m
+          limits:
+            memory: 2Gi
+            cpu: 1000m
+        livenessProbe:
+          httpGet:
+            path: /signin
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /signin
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 5

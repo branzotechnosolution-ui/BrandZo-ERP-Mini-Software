@@ -1,0 +1,14 @@
+[Unit]
+Description=BrandZo ERP Queue Worker
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/Users/macbook/Documents/BrandZo_ERP
+ExecStart=/usr/bin/php /Users/macbook/Documents/BrandZo_ERP/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

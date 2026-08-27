@@ -1,0 +1,14 @@
+{
+    "name": "Internship",
+    "alias": "internship",
+    "description": "Manage intern/student information",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Internship\\Providers\\InternshipServiceProvider",
+        "Modules\\Internship\\Providers\\EventServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

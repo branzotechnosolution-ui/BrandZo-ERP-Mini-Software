@@ -1,0 +1,24 @@
+replicaCount: 5
+
+image:
+  repository: brandzo/erp-prod
+  pullPolicy: IfNotPresent
+  tag: 31.0.0
+
+service:
+  type: LoadBalancer
+  port: 80
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4096Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 5
+  maxReplicas: 50
+  targetCPUUtilizationPercentage: 75

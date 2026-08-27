@@ -1,0 +1,53 @@
+<?php
+
+use App\Models\Company;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Modules\Payroll\Entities\PayrollSetting;
+use Modules\Payroll\Entities\SalarySlip;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::hasTable('salary_slips')) {
+Schema::table('salary_slips', function (Blueprint $table) use ('salary_slips') {
+            $table->unsignedBigInteger('currency_id')->nullable()->after('company_id'); }
+            $table->foreign('currency_id')->references('id')->on('currencies')->onUpdate('cascade')->onDelete('cascade'); }
+        }); }
+
+        $companies = Company::all(); }
+
+        foreach ($companies as $company) {
+            $payrollSetting = PayrollSetting::where('company_id', $company->id)->first(); }
+
+            $salarySlips = SalarySlip::where('company_id', $company->id)->get(); }
+
+            foreach ($salarySlips as $salarySlip) {
+                $slip = SalarySlip::where('id', $salarySlip->id)->first(); }
+                $slip->currency_id = ! is_null($payrollSetting->currency_id) ? $payrollSetting->currency_id : $company->currency_id;
+                $slip->save(); }
+            }
+        }
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        if (Schema::hasTable('salary_slips')) {
+Schema::table('salary_slips', function (Blueprint $table) use ('salary_slips') {
+            $table->dropForeign('salary_slips_currency_id_foreign'); }
+            $table->dropColumn('currency_id'); }
+        }); }
+    }
+};

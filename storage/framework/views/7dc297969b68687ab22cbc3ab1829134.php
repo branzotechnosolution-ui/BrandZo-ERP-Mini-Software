@@ -1,0 +1,2 @@
+<link rel="stylesheet" href="<?php echo e(asset('vendor/css/daterangepicker.css')); ?>">
+<?php /**PATH /Users/macbook/Downloads/BrandZo_ERP_Mini_Software 3/resources/views/sections/daterange_css.blade.php ENDPATH**/ ?>

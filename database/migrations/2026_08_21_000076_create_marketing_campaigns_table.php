@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (!Schema::hasTable('marketing_campaigns')) {
+            Schema::create('marketing_campaigns', function (Blueprint $table) {
+                $table->id();
+                $table->string('campaign_name')->default('Global Enterprise AI SaaS Campaign');
+                $table->string('channel')->default('Omnichannel (Email / WhatsApp / LinkedIn)');
+                $table->decimal('budget_usd', 10, 2)->default(14200.00);
+                $table->integer('leads_generated')->default(3840);
+                $table->string('status')->default('Active');
+                $table->timestamps();
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('marketing_campaigns');
+    }
+};
