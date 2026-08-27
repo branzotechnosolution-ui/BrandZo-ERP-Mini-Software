@@ -78,9 +78,9 @@
     $sortedEvents = $timelineEvents->sortByDesc('time');
 @endphp
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card border-0 b-shadow-4 rounded-lg bg-white mb-4">
+<div class="row w-100 mx-0">
+    <div class="col-md-12 px-0">
+        <div class="card border-0 b-shadow-4 rounded-lg bg-white mb-4 w-100">
             <div class="card-header bg-white border-bottom-grey py-3 px-4 d-flex justify-content-between align-items-center">
                 <h4 class="f-15 font-weight-bold text-darkest-grey mb-0">
                     <i class="fa fa-comments text-primary mr-2"></i>Real Communication & Activity History

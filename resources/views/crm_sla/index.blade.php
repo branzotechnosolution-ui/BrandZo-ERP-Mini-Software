@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo SLA Escalation & Smart Sales Monitoring Engine ⏰🚨📊🔔📈</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo SLA Escalation & Smart Sales Monitoring Engine ⏰🚨📊🔔📈</h2>
         <span class="badge badge-success px-3 py-2 f-14">AVG RESPONSE: 11.40 MINS • 96.40% SLA COMPLIANCE</span>
     </div>
 

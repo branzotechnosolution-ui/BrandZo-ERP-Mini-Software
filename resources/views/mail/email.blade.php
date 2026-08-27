@@ -2,10 +2,7 @@
 # @lang('email.hello')@if(!empty($notifiableName)){{ ' '.$notifiableName }}@endif!
 
 @if (!empty($content))
-
-@component('mail::text', ['text' => $content])
-
-@endcomponent
+{!! $content !!}
 @endif
 
 @if (!empty($url))

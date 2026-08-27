@@ -35,7 +35,7 @@
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
         <h4 class="f-18 font-weight-bold text-dark mb-3">API Gateway, OAuth2 Authentication & Webhook Operations</h4>
-        <p class="text-muted mb-4">Managing rate limiting (10,000 req/min), OAuth2 bearer authentication, 384,000 daily webhook events, mTLS security, and zero-downtime versioning across all BrandZo microservices.</p>
+        <p class="text-muted mb-4">Managing rate limiting (10,000 req/min), OAuth2 bearer authentication, 384,000 daily webhook events, mTLS security, and zero-downtime versioning across all BranZo microservices.</p>
         <button class="btn btn-primary btn-sm">Manage API Keys & Security Policies</button>
     </div>
 </div>

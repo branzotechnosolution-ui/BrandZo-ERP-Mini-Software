@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Real Local Environment Validation Dashboard 💻🏠⚡🔍📊</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Real Local Environment Validation Dashboard 💻🏠⚡🔍📊</h2>
         <span class="badge badge-success px-3 py-2 f-14">100% SYSTEM STABILITY • 571 MIGRATIONS • 0 RUNTIME EXCEPTIONS</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Real Environment Stability Audit</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Real Environment Stability Audit</h4>
         <p class="text-muted mb-4">571 Database Migrations → 163 Integrated Modules → CRM / HRMS / Billing / AI Agent / Portal Verified → 0 Runtime Errors → System Stable.</p>
         <button class="btn btn-success btn-sm">Re-run Real Environment Diagnostics & Log Audit</button>
     </div>

@@ -26,7 +26,7 @@ class NotificationCenterService
         if (!empty($mobile)) {
             $ws = new WhatsAppService($companyId);
             $ws->sendNotification($mobile, $event, [
-                'company_name' => 'BrandZo ERP',
+                'company_name' => 'BranZo Techno Solution',
                 'client_name' => $title
             ]);
         }

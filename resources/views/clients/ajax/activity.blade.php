@@ -1,6 +1,6 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="card border-0 b-shadow-4 rounded-lg bg-white mb-4">
+<div class="row w-100 mx-0">
+    <div class="col-md-12 px-0">
+        <div class="card border-0 b-shadow-4 rounded-lg bg-white mb-4 w-100">
             <div class="card-header bg-white border-bottom-grey py-3 px-4 d-flex justify-content-between align-items-center">
                 <h4 class="f-15 font-weight-bold text-darkest-grey mb-0">
                     <i class="fa fa-history text-primary mr-2"></i>Activity Timeline
@@ -43,7 +43,7 @@
                         </div>
                         <div>
                             <h5 class="f-14 font-weight-bold text-darkest-grey mb-1">Role & Permissions Assigned</h5>
-                            <p class="f-12 text-dark-grey mb-1">Assigned Client Role & access permissions for BrandZo ERP portal.</p>
+                            <p class="f-12 text-dark-grey mb-1">Assigned Client Role & access permissions for BranZo Techno Solution portal.</p>
                             <span class="f-11 text-lightest-grey">{{ $client->updated_at ? $client->updated_at->format('d M Y, h:i A') : 'N/A' }}</span>
                         </div>
                     </div>

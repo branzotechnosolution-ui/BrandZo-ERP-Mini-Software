@@ -21,7 +21,7 @@ class BrandZoCrmAiSalesAssistantService
     public static function generateReply($channel = 'WhatsApp', $context = 'Proposal Follow-up')
     {
         if (strtolower($channel) === 'whatsapp') {
-            $msg = 'Hi Alex! Quick follow-up on the BrandZo ERP proposal sent yesterday. Let me know if you have 5 mins for a brief quick call today!';
+            $msg = 'Hi Alex! Quick follow-up on the BranZo Techno Solution proposal sent yesterday. Let me know if you have 5 mins for a brief quick call today!';
         } else {
             $msg = 'Dear Alex,\n\nI hope this email finds you well. I wanted to touch base regarding the BrandZo AI ERP OS proposal for Horizon Global. Please let us know if you need any custom API documentation.\n\nBest regards,\nSales Team';
         }

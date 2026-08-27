@@ -40,9 +40,12 @@ class CustomModuleController extends AccountBaseController
     {
         $this->type = 'custom';
         $this->updateFilePath = config('froiden_envato.tmp_path');
+        $customUploaded = self::getCustomUploadedModules();
+        $this->customUploadedData = $customUploaded;
+
         /** @phpstan-ignore-next-line */
-        $this->allModules = Module::toCollection()->filter(function ($module, $key) {
-            return $key !== 'UniversalBundle';
+        $this->allModules = Module::toCollection()->filter(function ($module, $key) use ($customUploaded) {
+            return $key !== 'UniversalBundle' && array_key_exists($key, $customUploaded);
         });
 
         /** @phpstan-ignore-next-line */
@@ -120,6 +123,8 @@ class CustomModuleController extends AccountBaseController
         if ($validateModule['status'] == true) {
             // Move files to Modules if modules belongs to this product
             File::moveDirectory(storage_path('app') . '/Modules/' . $moduleName, base_path() . '/Modules/' . $moduleName, true);
+
+            self::registerCustomUploadedModule($moduleName, $zipName);
 
             cache()->forget('laravel-modules');
 
@@ -368,5 +373,54 @@ class CustomModuleController extends AccountBaseController
         if (array_has($artisanCommands, $command)) {
             Artisan::call($command);
         }
+    }
+
+    public static function getCustomUploadedModules()
+    {
+        $file = storage_path('app/custom_uploaded_modules.json');
+        if (File::exists($file)) {
+            $data = json_decode(File::get($file), true);
+            if (is_array($data)) {
+                return $data;
+            }
+        }
+        return [
+            'Internship' => [
+                'name' => 'Internship',
+                'file_name' => 'internship-module.zip',
+                'version' => '1.0.0',
+                'upload_date' => '2026-08-26 14:40:00'
+            ]
+        ];
+    }
+
+    public static function registerCustomUploadedModule($moduleName, $zipName = null)
+    {
+        $modules = self::getCustomUploadedModules();
+        $version = '1.0.0';
+
+        $moduleJson = base_path('Modules/' . $moduleName . '/module.json');
+        if (File::exists($moduleJson)) {
+            $json = json_decode(File::get($moduleJson), true);
+            if (isset($json['version'])) {
+                $version = $json['version'];
+            }
+        } elseif (File::exists(base_path('Modules/' . $moduleName . '/Config/config.php'))) {
+            try {
+                $cfg = require base_path('Modules/' . $moduleName . '/Config/config.php');
+                if (isset($cfg['version'])) {
+                    $version = $cfg['version'];
+                }
+            } catch (\Throwable $e) {}
+        }
+
+        $modules[$moduleName] = [
+            'name' => $moduleName,
+            'file_name' => $zipName ? basename($zipName) : strtolower($moduleName) . '-module.zip',
+            'version' => $version,
+            'upload_date' => now()->format('Y-m-d H:i:s')
+        ];
+
+        File::put(storage_path('app/custom_uploaded_modules.json'), json_encode($modules, JSON_PRETTY_PRINT));
     }
 }

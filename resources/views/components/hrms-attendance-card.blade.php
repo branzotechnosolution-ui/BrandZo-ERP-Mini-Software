@@ -408,11 +408,7 @@
                         if (actionType === 'checkout') {
                             window.jQuery('#hrmsCheckoutModal').modal('hide');
                             setTimeout(function() {
-                                if (document.getElementById('logout-form')) {
-                                    document.getElementById('logout-form').submit();
-                                } else {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             }, 400);
                             return;
                         }

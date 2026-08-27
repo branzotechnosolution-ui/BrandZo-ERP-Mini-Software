@@ -27,6 +27,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Traits\ImportExcel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class LeadContactController extends AccountBaseController
@@ -633,58 +634,67 @@ class LeadContactController extends AccountBaseController
             return Reply::error('This lead contact has already been converted to a deal.');
         }
 
-        $lastDeal = Deal::orderBy('id', 'desc')->first();
-        $nextNum = $lastDeal ? ($lastDeal->id + 1) : 1;
-        $generatedDealCode = 'BZ' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
+        DB::beginTransaction();
 
-        $deal = new Deal();
-        $deal->company_id = $leadContact->company_id ?: company()->id;
-        $deal->name = $leadContact->company_name ? ($leadContact->company_name . ' - ' . $leadContact->client_name) : $leadContact->client_name;
-        
-        if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'deal_code')) {
-            $deal->deal_code = $generatedDealCode;
-        }
+        try {
+            $lastDeal = Deal::orderBy('id', 'desc')->first();
+            $nextNum = $lastDeal ? ($lastDeal->id + 1) : 1;
+            $generatedDealCode = 'BZ' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
 
-        if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'lead_id')) {
-            $deal->lead_id = $leadContact->id;
-        }
-
-        if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'lead_contact_id')) {
-            $deal->lead_contact_id = $leadContact->id;
-        }
-
-        $agentUserId = $leadContact->agent_id ?: ($leadContact->lead_owner ?: user()->id);
-        if ($agentUserId) {
-            $leadAgent = LeadAgent::where('user_id', $agentUserId)->first();
-            if (!$leadAgent) {
-                $leadAgent = new LeadAgent();
-                $leadAgent->user_id = $agentUserId;
-                $leadAgent->company_id = company()->id;
-                $leadAgent->save();
+            $deal = new Deal();
+            $deal->company_id = $leadContact->company_id ?: company()->id;
+            $deal->name = $leadContact->company_name ? ($leadContact->company_name . ' - ' . $leadContact->client_name) : $leadContact->client_name;
+            
+            if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'deal_code')) {
+                $deal->deal_code = $generatedDealCode;
             }
-            $deal->agent_id = $leadAgent->id;
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'lead_id')) {
+                $deal->lead_id = $leadContact->id;
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('deals', 'lead_contact_id')) {
+                $deal->lead_contact_id = $leadContact->id;
+            }
+
+            $agentUserId = $leadContact->agent_id ?: ($leadContact->lead_owner ?: user()->id);
+            if ($agentUserId) {
+                $leadAgent = LeadAgent::where('user_id', $agentUserId)->first();
+                if (!$leadAgent) {
+                    $leadAgent = new LeadAgent();
+                    $leadAgent->user_id = $agentUserId;
+                    $leadAgent->company_id = company()->id;
+                    $leadAgent->save();
+                }
+                $deal->agent_id = $leadAgent->id;
+            }
+
+            $defaultPipeline = LeadPipeline::orderBy('default', 'DESC')->first();
+            $defaultStage = PipelineStage::where('lead_pipeline_id', $defaultPipeline?->id)->first() ?: PipelineStage::first();
+
+            $deal->lead_pipeline_id = $defaultPipeline?->id ?: 1;
+            $deal->pipeline_stage_id = $defaultStage?->id ?: 1;
+            $deal->value = $leadContact->value ?: 0;
+            $deal->currency_id = company() ? company()->currency_id : 1;
+            $deal->note = $leadContact->note;
+            $deal->close_date = now()->addDays(14)->format('Y-m-d');
+            $deal->next_follow_up = 'yes';
+            $deal->save();
+
+            \App\Models\DealFollowUp::where('lead_id', $leadContact->id)->update(['deal_id' => $deal->id]);
+
+            $leadContact->converted = 1;
+            $leadContact->save();
+
+            DB::commit();
+
+            $redirectUrl = route('deals.show', $deal->id);
+
+            return Reply::successWithData(__('Lead successfully converted to Deal [' . $generatedDealCode . ']'), ['redirectUrl' => $redirectUrl]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return Reply::error('Lead conversion failed: ' . $e->getMessage());
         }
-
-        $defaultPipeline = LeadPipeline::orderBy('default', 'DESC')->first();
-        $defaultStage = PipelineStage::where('lead_pipeline_id', $defaultPipeline?->id)->first() ?: PipelineStage::first();
-
-        $deal->lead_pipeline_id = $defaultPipeline?->id ?: 1;
-        $deal->pipeline_stage_id = $defaultStage?->id ?: 1;
-        $deal->value = $leadContact->value ?: 0;
-        $deal->currency_id = company() ? company()->currency_id : 1;
-        $deal->note = $leadContact->note;
-        $deal->close_date = now()->addDays(14)->format('Y-m-d');
-        $deal->next_follow_up = 'yes';
-        $deal->save();
-
-        \App\Models\DealFollowUp::where('lead_id', $leadContact->id)->update(['deal_id' => $deal->id]);
-
-        $leadContact->converted = 1;
-        $leadContact->save();
-
-        $redirectUrl = route('deals.show', $deal->id);
-
-        return Reply::successWithData(__('Lead successfully converted to Deal [' . $generatedDealCode . ']'), ['redirectUrl' => $redirectUrl]);
     }
 
 }

@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Integration Marketplace & API Ecosystem Command Center 🔌🤖🌍🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Integration Marketplace & API Ecosystem Command Center 🔌🤖🌍🚀</h2>
         <span class="badge badge-primary px-3 py-2 f-14">384 CONNECTORS • 18.4M DAILY API REQUESTS</span>
     </div>
 

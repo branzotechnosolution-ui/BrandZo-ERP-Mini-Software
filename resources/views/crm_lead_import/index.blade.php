@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Bulk Lead Import Engine & Column Mapper 📤📄🔍🛡️📊</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Bulk Lead Import Engine & Column Mapper 📤📄🔍🛡️📊</h2>
         <span class="badge badge-success px-3 py-2 f-14">8,450 LEADS IMPORTED • 98.40% SUCCESS RATE • DEDUPLICATION ACTIVE</span>
     </div>
 

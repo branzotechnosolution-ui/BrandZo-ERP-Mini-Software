@@ -117,6 +117,7 @@ class ModuleSetting extends BaseModel
                     'module_name' => $module,
                     'type' => $role,
                     'company_id' => $company->id,
+                    'status' => 'active',
                 ]);
             }
         }

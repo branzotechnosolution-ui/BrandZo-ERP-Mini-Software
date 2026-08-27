@@ -158,12 +158,12 @@
                 <div class="row">
                     <div class="col-md-6 mb-2">
                         <span class="f-11 text-dark-grey d-block font-weight-semibold">Billing Address</span>
-                        <span class="f-13 font-weight-bold text-darkest-grey">{{ $client->clientDetails?->address ?: 'BrandZo HQ, Main Road, Chennai' }}</span>
+                        <span class="f-13 font-weight-bold text-darkest-grey">{{ $client->clientDetails?->address ?: 'BranZo HQ, Main Road, Chennai' }}</span>
                     </div>
 
                     <div class="col-md-6 mb-2">
                         <span class="f-11 text-dark-grey d-block font-weight-semibold">Shipping Address</span>
-                        <span class="f-13 font-weight-bold text-darkest-grey">{{ $client->clientDetails?->shipping_address ?: ($client->clientDetails?->address ?: 'BrandZo HQ, Main Road, Chennai') }}</span>
+                        <span class="f-13 font-weight-bold text-darkest-grey">{{ $client->clientDetails?->shipping_address ?: ($client->clientDetails?->address ?: 'BranZo HQ, Main Road, Chennai') }}</span>
                     </div>
 
                     <div class="col-md-3 mb-2">

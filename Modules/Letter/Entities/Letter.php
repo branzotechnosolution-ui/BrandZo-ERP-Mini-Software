@@ -12,6 +12,25 @@ class Letter extends BaseModel
 {
     use HasCompany;
 
+    protected $casts = [
+        'offer_details' => 'array',
+    ];
+
+    protected $fillable = [
+        'company_id',
+        'user_id',
+        'template_id',
+        'creator_id',
+        'name',
+        'top',
+        'right',
+        'left',
+        'bottom',
+        'description',
+        'status',
+        'offer_details',
+    ];
+
     protected $appends = ['employee_name'];
 
     public function user(): BelongsTo
@@ -33,6 +52,10 @@ class Letter extends BaseModel
     {
         return Attribute::make(
             get: function () {
+                $details = $this->offer_details;
+                if (!empty($details['employee_name'])) {
+                    return $details['employee_name'];
+                }
                 return $this->name ?: $this->user?->name;
             },
         );

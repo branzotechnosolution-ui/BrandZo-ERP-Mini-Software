@@ -17,8 +17,8 @@ $deleteDocumentPermission = user()->permission('delete_client_document');
 </style>
 
 <!-- TAB CONTENT START -->
-<div class="tab-pane fade show active mt-5" role="tabpanel" aria-labelledby="nav-email-tab">
-    <x-cards.data :title="__('app.menu.documents')">
+<div class="tab-pane fade show active mt-0 w-100" role="tabpanel" aria-labelledby="nav-email-tab">
+    <x-cards.data title="Client Official Documents">
 
         @if ($addDocumentPermission == 'all')
             <div class="row">

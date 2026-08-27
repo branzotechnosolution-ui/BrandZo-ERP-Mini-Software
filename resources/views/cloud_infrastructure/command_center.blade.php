@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Global Cloud Infrastructure & Enterprise Scale Command Center ☁️🌐⚡🔒🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Global Cloud Infrastructure & Enterprise Scale Command Center ☁️🌐⚡🔒🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">99.999% SLA UPTIME • 24 GLOBAL CLOUD REGIONS</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Cloud Infrastructure Engine</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Cloud Infrastructure Engine</h4>
         <p class="text-muted mb-4">24 Global Regions → 1,420 Active Nodes → 64 Database Shards (420k QPS) → 12ms Edge Latency → 99.999% SLA Uptime → 42.8% Cost Savings → Infrastructure Live.</p>
         <button class="btn btn-primary btn-sm">Trigger Global Multi-Region Disaster Recovery Test & View Node Metrics</button>
     </div>

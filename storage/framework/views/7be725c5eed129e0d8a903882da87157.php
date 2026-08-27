@@ -1,2 +1,0 @@
-<!-- Update notifications disabled for BrandZo ERP -->
-<?php /**PATH /Users/macbook/Downloads/BrandZo_ERP_Mini_Software 3/resources/views/dashboard/update-message-module-dashboard.blade.php ENDPATH**/ ?>

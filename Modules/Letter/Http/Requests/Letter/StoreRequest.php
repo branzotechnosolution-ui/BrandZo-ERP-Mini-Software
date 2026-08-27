@@ -12,22 +12,11 @@ class StoreRequest extends FormRequest
 
     public function rules(): array
     {
-        $rules = [
-            'template_id' => 'required|exists:letter_templates,id',
-            'user_id' => 'nullable|exists:users,id',
-            'description' => 'required',
-            'left' => 'required|numeric',
-            'right' => 'required|numeric',
-            'top' => 'required|numeric',
-            'bottom' => 'required|numeric',
-            'description' => 'required|string',
+        return [
+            'user_id' => 'nullable',
+            'employee_name' => 'nullable|string',
+            'status' => 'nullable|string',
         ];
-
-        if (!$this->user_id) {
-            $rules['employeeName'] = 'required|string';
-        }
-
-        return $rules;
     }
 
     /**

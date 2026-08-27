@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Marketing Automation & Campaign ROI Dashboard 📢📧💬📊🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Marketing Automation & Campaign ROI Dashboard 📢📧💬📊🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">4.82X ROI MULTIPLIER • .20M PROJECTED ARR</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Marketing & Revenue Acceleration</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Marketing & Revenue Acceleration</h4>
         <p class="text-muted mb-4">384 Active Marketing Campaigns → 1.42M Nurture Messages → 52.4% Lead-to-Customer Conversion → 4.82x Campaign ROI → .20M Projected ARR → Marketing Automation Complete.</p>
         <button class="btn btn-success btn-sm">Launch Multi-Touch Automated Conversion Sequence & View Live Attribution</button>
     </div>

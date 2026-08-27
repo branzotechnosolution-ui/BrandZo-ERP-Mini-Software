@@ -51,7 +51,7 @@ class WhatsAppService
 
     protected function buildTemplateMessage($event, $data)
     {
-        $companyName = $data['company_name'] ?? 'BrandZo ERP';
+        $companyName = $data['company_name'] ?? 'BranZo Techno Solution';
         $clientName = $data['client_name'] ?? 'Valued Client';
 
         switch ($event) {

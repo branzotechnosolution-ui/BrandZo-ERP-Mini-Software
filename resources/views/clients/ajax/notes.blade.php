@@ -40,7 +40,7 @@ $addClientNotePermission = user()->permission('add_client_note');
                     'details' => $cn->details,
                     'type' => 'Client Note',
                     'badge_color' => 'badge-primary',
-                    'created_by' => $client->clientDetails?->addedBy?->name ?: 'Hostinger Admin',
+                    'created_by' => $client->clientDetails?->addedBy?->name ?: 'Admin',
                     'created_at' => $cn->created_at,
                 ]);
             }

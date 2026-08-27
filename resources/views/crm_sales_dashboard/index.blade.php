@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Executive Sales Command Dashboard 📈📊💼🏆🔮</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Executive Sales Command Dashboard 📈📊💼🏆🔮</h2>
         <span class="badge badge-success px-3 py-2 f-14">REVENUE: ,200,000.00 • FORECAST: ,122,500.00</span>
     </div>
 

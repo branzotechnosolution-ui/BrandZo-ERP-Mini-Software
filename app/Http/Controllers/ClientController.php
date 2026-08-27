@@ -594,17 +594,19 @@ class ClientController extends AccountBaseController
             return $this->tickets();
         case 'orders':
             return $this->orders();
+        case 'activity':
+            return $this->activity();
+        case 'communication':
+            return $this->communication();
+        case 'contracts':
+            return $this->contracts();
+        case 'tasks':
+            return $this->tasks();
         case 'documents':
+            return $this->documents();
         case 'files':
-            abort_403(!($this->viewDocumentPermission == 'all'
-                || ($this->viewDocumentPermission == 'added' && $this->client->clientDetails->added_by == user()->id)
-                || ($this->viewDocumentPermission == 'owned' && $this->client->clientDetails->user_id == user()->id)
-                || ($this->viewDocumentPermission == 'both' && ($this->client->clientDetails->added_by == user()->id || $this->client->clientDetails->user_id == user()->id))));
-
-            $this->user = $this->client;
-            $this->clientDocuments = \App\Models\ClientDocument::where('user_id', $this->client->id)->get();
-            $this->view = 'clients.ajax.documents';
-            break;
+        case 'vault':
+            return $this->files();
         case 'gdpr':
             $this->client = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id);
             $this->consents = PurposeConsent::with(['user' => function ($query) use ($id) {
@@ -1139,6 +1141,93 @@ class ClientController extends AccountBaseController
         }
 
         return $dataTable->render('clients.show', $this->data);
+    }
+
+    public function activity()
+    {
+        $this->activeTab = 'activity';
+        $this->view = 'clients.ajax.activity';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
+    }
+
+    public function communication()
+    {
+        $this->activeTab = 'communication';
+        $this->view = 'clients.ajax.communication';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
+    }
+
+    public function contracts()
+    {
+        $this->activeTab = 'contracts';
+        $this->view = 'clients.ajax.contracts';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
+    }
+
+    public function tasks()
+    {
+        $this->activeTab = 'tasks';
+        $this->view = 'clients.ajax.tasks';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
+    }
+
+    public function documents()
+    {
+        $this->viewDocumentPermission = user()->permission('view_client_document');
+        abort_403(!($this->viewDocumentPermission == 'all'
+            || ($this->viewDocumentPermission == 'added' && $this->client->clientDetails->added_by == user()->id)
+            || ($this->viewDocumentPermission == 'owned' && $this->client->clientDetails->user_id == user()->id)
+            || ($this->viewDocumentPermission == 'both' && ($this->client->clientDetails->added_by == user()->id || $this->client->clientDetails->user_id == user()->id))));
+
+        $this->user = $this->client;
+        $this->clientDocuments = \App\Models\ClientDocument::where('user_id', $this->client->id)->get();
+        $this->activeTab = 'documents';
+        $this->view = 'clients.ajax.documents';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
+    }
+
+    public function files()
+    {
+        $this->viewDocumentPermission = user()->permission('view_client_document');
+        abort_403(!($this->viewDocumentPermission == 'all'
+            || ($this->viewDocumentPermission == 'added' && $this->client->clientDetails->added_by == user()->id)
+            || ($this->viewDocumentPermission == 'owned' && $this->client->clientDetails->user_id == user()->id)
+            || ($this->viewDocumentPermission == 'both' && ($this->client->clientDetails->added_by == user()->id || $this->client->clientDetails->user_id == user()->id))));
+
+        $this->user = $this->client;
+        $this->activeTab = 'files';
+        $this->view = 'clients.ajax.vault';
+
+        if (request()->ajax()) {
+            return $this->returnAjax($this->view);
+        }
+
+        return view('clients.show', $this->data);
     }
 
 }

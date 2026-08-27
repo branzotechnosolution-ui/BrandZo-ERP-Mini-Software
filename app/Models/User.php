@@ -912,27 +912,19 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     public function getUserOtherRoleAttribute()
     {
-        $userRole = null;
+        $userRoles = $this->roles->pluck('name')->toArray();
 
-        $nonClientRoles = cache()->remember(
-            'non-client-roles',
-            now()->addDay(),
-            fn() => Role::where('name', '<>', 'client')->orderBy('id')->get()
-        );
+        if (in_array('admin', $userRoles)) {
+            return 'admin';
+        }
 
-        foreach ($nonClientRoles as $role) {
-            foreach ($this->role as $urole) {
-                if ($role->id == $urole->role_id) {
-                    $userRole = $role->name;
-                }
-
-                if ($userRole == 'admin') {
-                    break;
-                }
+        foreach ($this->roles as $role) {
+            if ($role->name != 'employee' && $role->name != 'client') {
+                return $role->name;
             }
         }
 
-        return $userRole;
+        return 'employee';
     }
 
     /**

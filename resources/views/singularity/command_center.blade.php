@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Global Business Singularity OS Command Center</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Global Business Singularity OS Command Center</h2>
         <span class="badge badge-success px-3 py-2 f-14">MASTER SINGULARITY ACTIVE (100/100)</span>
     </div>
 

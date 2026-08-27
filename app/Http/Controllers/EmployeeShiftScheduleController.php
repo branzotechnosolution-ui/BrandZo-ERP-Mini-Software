@@ -540,7 +540,9 @@ class EmployeeShiftScheduleController extends AccountBaseController
         $employeeShift = EmployeeShift::find($request->shift);
         $officeOpenDays = json_decode($employeeShift->office_open_days);
 
-        $date = Carbon::createFromFormat('d-m-Y', '01-' . $request->month . '-' . $request->year)->format('Y-m-d');
+        $year = $request->year ?: now()->format('Y');
+        $month = $request->month ?: now()->format('m');
+        $date = Carbon::createFromFormat('d-m-Y', '01-' . $month . '-' . $year)->format('Y-m-d');
 
         $period = [];
         $singleDate = '';
@@ -569,7 +571,17 @@ class EmployeeShiftScheduleController extends AccountBaseController
         }
         else if ($request->assign_shift_by == 'date') {
             $singleDate = Carbon::createFromFormat(company()->date_format, $request->single_date);
-        } else {
+        }
+        else if ($request->assign_shift_by == 'permanent') {
+            foreach ($employees as $userId) {
+                \App\Models\EmployeeDetails::where('user_id', $userId)->update(['employee_shift_id' => $request->shift]);
+            }
+
+            $startDate = now(company()->timezone)->startOfMonth();
+            $endDate = $startDate->copy()->addMonths(12)->endOfMonth();
+            $multiDates = CarbonPeriod::create($startDate, $endDate);
+        }
+        else {
             $dates = explode(',', $request->multi_date);
             $startDate = Carbon::parse($dates[0]);
             $endDate = Carbon::parse($dates[1]);
@@ -578,7 +590,7 @@ class EmployeeShiftScheduleController extends AccountBaseController
 
         $dateRange = [];
 
-        if ($request->assign_shift_by == 'multiple' || $request->assign_shift_by == 'month') {
+        if (in_array($request->assign_shift_by, ['multiple', 'month', 'permanent'])) {
             foreach ($multiDates as $multiDate) {
                 $dateRange[] = $multiDate->format('Y-m-d');
             }
@@ -646,8 +658,9 @@ class EmployeeShiftScheduleController extends AccountBaseController
 
                 if ($officeOpenDays && !in_array($date->dayOfWeek, $officeOpenDays)) {
 
-                    $dayOffShiftId = EmployeeShift::where('shift_name', 'Day Off')->where('company_id', company()->id)->first();
-                    $this->bulkData($request, $date, $userData, $userId, $insertData, $officeOpenDays, $dayOffShiftId->id);
+                    $dayOffShiftId = EmployeeShift::where('shift_name', 'Day Off')->first();
+                    $dayOffId = $dayOffShiftId?->id ?: 1;
+                    $this->bulkData($request, $date, $userData, $userId, $insertData, $officeOpenDays, $dayOffId);
                     continue;
                 }
 

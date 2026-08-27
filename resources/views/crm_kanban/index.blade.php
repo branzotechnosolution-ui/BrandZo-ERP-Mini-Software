@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Interactive CRM Kanban Pipeline Board 📋🔀📊💼🎯</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Interactive CRM Kanban Pipeline Board 📋🔀📊💼🎯</h2>
         <span class="badge badge-success px-3 py-2 f-14">PIPELINE VALUE: ,850,000.00 • 61.97% CONVERSION RATE</span>
     </div>
 

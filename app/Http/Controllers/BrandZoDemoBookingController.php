@@ -25,7 +25,7 @@ class BrandZoDemoBookingController extends AccountBaseController
             'client_name' => $request->input('name', 'Prospect'),
             'client_email' => $request->input('email', 'demo@brandzo.in'),
             'mobile' => $request->input('mobile', '9999999999'),
-            'note' => 'Requested live BrandZo ERP demo',
+            'note' => 'Requested live BranZo Techno Solution demo',
             'company_id' => 1
         ]);
 

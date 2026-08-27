@@ -50,7 +50,7 @@ $statusText = $latestDeal ? ($latestDeal->leadStage?->name ?: 'Follow Up 3') : '
                         </span>
                         <div class="f-12 text-dark-grey">
                             <span class="text-lightest">Lead Agent:</span> 
-                            <span class="font-weight-semibold text-darkest-grey">{{ $leadContact->leadOwner?->name ?: ($leadContact->addedBy?->name ?: 'Hostinger Admin') }}</span>
+                            <span class="font-weight-semibold text-darkest-grey">{{ $leadContact->leadOwner?->name ?: ($leadContact->addedBy?->name ?: 'Admin') }}</span>
                         </div>
                     </div>
 

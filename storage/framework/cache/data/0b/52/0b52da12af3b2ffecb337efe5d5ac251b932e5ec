@@ -1,1 +1,1 @@
-1787840307a:7:{s:4:"name";s:14:"ProjectRoadmap";s:5:"alias";s:14:"projectroadmap";s:11:"description";s:0:"";s:8:"keywords";a:0:{}s:8:"priority";i:0;s:9:"providers";a:1:{i:0;s:62:"Modules\ProjectRoadmap\Providers\ProjectRoadmapServiceProvider";}s:5:"files";a:0:{}}
+1787854764a:7:{s:4:"name";s:14:"ProjectRoadmap";s:5:"alias";s:14:"projectroadmap";s:11:"description";s:0:"";s:8:"keywords";a:0:{}s:8:"priority";i:0;s:9:"providers";a:1:{i:0;s:62:"Modules\ProjectRoadmap\Providers\ProjectRoadmapServiceProvider";}s:5:"files";a:0:{}}

@@ -57,17 +57,20 @@
                         </x-forms.select>
                     </div>
 
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <x-forms.label fieldId="mark_attendance_by_month" :fieldLabel="__('modules.attendance.assignShift') . ' ' . __('app.by')">
                             </x-forms.label>
-                            <div class="d-flex">
+                            <div class="d-flex flex-wrap">
                                 <x-forms.radio fieldId="mark_attendance_by_dates" :fieldLabel="__('app.date')" fieldValue="date"
                                     fieldName="assign_shift_by" checked="true"></x-forms.radio>
                                 <x-forms.radio fieldId="duration_multiple" :fieldLabel="__('modules.leaves.multiple')" fieldValue="multiple"
                                     fieldName="assign_shift_by"></x-forms.radio>
                                 <x-forms.radio fieldId="mark_attendance_by_month" :fieldLabel="__('app.month')"
                                     fieldName="assign_shift_by" fieldValue="month">
+                                </x-forms.radio>
+                                <x-forms.radio fieldId="assign_shift_permanent" fieldLabel="Permanent"
+                                    fieldName="assign_shift_by" fieldValue="permanent">
                                 </x-forms.radio>
                             </div>
                         </div>
@@ -246,10 +249,15 @@
                 $('.multi_date_div').removeClass('d-none')
                 $('.attendance_by_month').addClass('d-none')
             }
-            else {
+            else if($(this).val() == 'month'){
                 $('.single_date_div').addClass('d-none')
                 $('.multi_date_div').addClass('d-none')
                 $('.attendance_by_month').removeClass('d-none')
+            }
+            else if($(this).val() == 'permanent'){
+                $('.single_date_div').addClass('d-none')
+                $('.multi_date_div').addClass('d-none')
+                $('.attendance_by_month').addClass('d-none')
             }
         })
 

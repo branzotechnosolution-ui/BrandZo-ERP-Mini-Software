@@ -140,4 +140,8 @@ class EmployeeDetails extends BaseModel
         return $this->belongsTo(Team::class, 'department_id');
     }
 
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(EmployeeShift::class, 'employee_shift_id');
+    }
 }

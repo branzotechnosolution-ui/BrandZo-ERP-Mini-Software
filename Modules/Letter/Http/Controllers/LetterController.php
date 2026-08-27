@@ -31,10 +31,22 @@ class LetterController extends AccountBaseController
         });
     }
 
+    private function getLetterPermission($permName, $altPermName = null)
+    {
+        $perm = user()->permission($permName);
+        if (($perm === 'none' || !$perm) && $altPermName) {
+            $perm = user()->permission($altPermName);
+        }
+        if (in_array('admin', user_roles())) {
+            return 'all';
+        }
+        return $perm ?: 'none';
+    }
+
     public function index(LetterDataTable $dataTable)
     {
-        $this->viewPermission = user()->permission('view_letter');
-        abort_403($this->viewPermission !== 'all');
+        $this->viewPermission = $this->getLetterPermission('view_letter', 'view_offer_letter');
+        abort_403($this->viewPermission === 'none');
 
         $this->pageTitle = 'letter::app.menu.generate';
         return $dataTable->render('letter::letter.index', $this->data);
@@ -45,13 +57,22 @@ class LetterController extends AccountBaseController
      */
     public function create()
     {
-        $this->addPermission = user()->permission('add_letter');
-        abort_403($this->addPermission !== 'all');
+        $this->addPermission = $this->getLetterPermission('add_letter', 'add_offer_letter');
+        abort_403($this->addPermission === 'none');
 
-        $this->pageTitle = __('letter::app.addLetter');
+        $this->pageTitle = 'Create Offer Letter';
 
         $this->templates = Template::get();
-        $this->employees = User::with('employeeDetail')->onlyEmployee()->get();
+        $selectedEmpId = request()->employee_id ?: null;
+        $this->selectedEmployeeId = $selectedEmpId;
+        $this->nextRefNo = 'BZ' . str_pad(((Letter::max('id') ?: 0) + 1), 3, '0', STR_PAD_LEFT);
+
+        $employeesQuery = User::with('employeeDetail')->whereHas('employeeDetail');
+        if ($selectedEmpId) {
+            $employeesQuery->orWhere('id', $selectedEmpId);
+        }
+        $this->employees = $employeesQuery->get();
+
         $this->letter = request()->letterId ? Letter::with('user', 'template')->find(request()->letterId) : null;
         $this->employeeLetterVariable = $this->letter ? $this->employeeLetterVariable($this->letter) : [];
 
@@ -70,70 +91,45 @@ class LetterController extends AccountBaseController
      */
     public function store(StoreRequest $request)
     {
-        $this->addPermission = user()->permission('add_letter');
-        abort_403($this->addPermission !== 'all');
+        $this->addPermission = $this->getLetterPermission('add_letter', 'add_offer_letter');
+        abort_403($this->addPermission === 'none');
+
+        $status = $request->status ?: 'generated';
+        $offerDetails = $request->except(['_token', 'left', 'right', 'top', 'bottom', 'template_id']);
 
         $letter = new Letter();
-        $letter->template_id = $request->template_id;
-        $letter->user_id = $request->user_id;
+        $letter->company_id = company()->id;
+        $letter->template_id = $request->template_id ?: (Template::first()?->id ?: 1);
+        $letter->user_id = $request->user_id ?: null;
         $letter->creator_id = user()->id;
-        $letter->name = $request->user_id ? null : $request->employeeName;
-        $letter->left = $request->left;
-        $letter->right = $request->right;
-        $letter->top = $request->top;
-        $letter->bottom = $request->bottom;
-        $letter->description = $request->description;
+        $letter->name = $request->employee_name ?: ($request->user_id ? null : 'Offer Recipient');
+        $letter->top = $request->top ?: 20;
+        $letter->right = $request->right ?: 20;
+        $letter->left = $request->left ?: 20;
+        $letter->bottom = $request->bottom ?: 20;
+        $letter->description = $request->opening_paragraph ?: 'Offer of Employment';
+        $letter->status = $status;
+        $letter->offer_details = $offerDetails;
         $letter->save();
 
-        return Reply::redirect(route('letter.generate.index'), __('messages.recordSaved'));
-    }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        $this->viewPermission = user()->permission('view_letter');
-        abort_403($this->viewPermission !== 'all');
-
-        $this->letter = Letter::with('user', 'template')->findOrFail($id);
-        $this->pageTitle = $this->letter->employee_name . ' - ' . $this->letter->template->title;
-        $employeeLetterVariable = $this->employeeLetterVariable($this->letter);
-        $description = $this->letter->description;
-
-        foreach ($employeeLetterVariable as $key => $value) {
-            $description = str_replace($key, $value, $description);
+        if (empty($offerDetails['offer_ref_no'])) {
+            $offerDetails['offer_ref_no'] = 'BZ' . str_pad($letter->id, 3, '0', STR_PAD_LEFT);
+            $letter->offer_details = $offerDetails;
+            $letter->save();
         }
 
-        $this->description = $description;
-
-        if (request()->ajax()) {
-            $html = view('letter::letter.ajax.show', $this->data)->render();
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
-        }
-
-        $this->view = 'letter::letter.ajax.show';
-        return view('letter::letter.show', $this->data);
-
+        $msg = ($status == 'draft') ? __('Draft saved successfully') : __('Offer Letter created successfully');
+        
+        return Reply::redirect(route('letter.generate.index'), $msg);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $this->editPermission = user()->permission('edit_letter');
-        abort_403($this->editPermission !== 'all');
+        $this->editPermission = $this->getLetterPermission('edit_letter', 'edit_offer_letter');
+        abort_403($this->editPermission === 'none');
 
-        $this->pageTitle = __('letter::app.editLetter');
         $this->letter = Letter::with('user', 'template')->findOrFail($id);
-        $this->employees = [];
-
-        if ($this->letter->name) {
-            $this->employees = User::with('employeeDetail')->onlyEmployee()->get();
-        }
-
-        $this->employeeLetterVariable = $this->employeeLetterVariable($this->letter);
+        $this->pageTitle = 'Edit Offer Letter';
 
         if (request()->ajax()) {
             $html = view('letter::letter.ajax.edit', $this->data)->render();
@@ -144,24 +140,97 @@ class LetterController extends AccountBaseController
         return view('letter::letter.create', $this->data);
     }
 
+    public function show($id)
+    {
+        return $this->edit($id);
+    }
+
     public function update(UpdateRequest $request, $id)
     {
-        $this->editPermission = user()->permission('edit_letter');
-        abort_403($this->editPermission !== 'all');
+        $this->editPermission = $this->getLetterPermission('edit_letter', 'edit_offer_letter');
+        abort_403($this->editPermission === 'none');
 
         $letter = Letter::findOrFail($id);
+        $status = $request->status ?: $letter->status;
+        $offerDetails = $request->except(['_token', 'left', 'right', 'top', 'bottom', 'template_id']);
 
-        $letter->user_id = $request->user_id;
+        if (empty($offerDetails['offer_ref_no'])) {
+            $offerDetails['offer_ref_no'] = $letter->offer_details['offer_ref_no'] ?? ('BZ' . str_pad($letter->id, 3, '0', STR_PAD_LEFT));
+        }
+
+        $letter->user_id = $request->user_id ?: $letter->user_id;
         $letter->creator_id = user()->id;
-        $letter->name = $request->user_id ? null : $request->employeeName;
-        $letter->left = $request->left;
-        $letter->right = $request->right;
-        $letter->top = $request->top;
-        $letter->bottom = $request->bottom;
-        $letter->description = $request->description;
+        $letter->name = $request->employee_name ?: $letter->name;
+        $letter->top = $request->top ?: 20;
+        $letter->right = $request->right ?: 20;
+        $letter->left = $request->left ?: 20;
+        $letter->bottom = $request->bottom ?: 20;
+        $letter->description = $request->opening_paragraph ?: $letter->description;
+        $letter->status = $status;
+        $letter->offer_details = $offerDetails;
         $letter->save();
 
-        return Reply::redirect(route('letter.generate.index'), __('messages.updateSuccess'));
+        $msg = ($status == 'draft') ? __('Draft updated successfully') : __('Offer Letter updated successfully');
+
+        return Reply::redirect(route('letter.generate.index'), $msg);
+    }
+
+    public function offerEmployeeData($id)
+    {
+        $employee = User::with(['employeeDetail', 'employeeDetail.designation', 'employeeDetail.department', 'employeeDetail.reportingTo'])->findOrFail($id);
+
+        $empDetail = $employee->employeeDetail;
+        $annualCtc = $empDetail?->annual_ctc ?: 600000;
+        $monthlyTakehome = round($annualCtc / 12, 2);
+
+        $data = [
+            'user_id' => $employee->id,
+            'employee_name' => $employee->name,
+            'employee_id_val' => $empDetail?->employee_id ?? '00' . $employee->id,
+            'designation' => $empDetail?->designation?->name ?? 'Software Engineer',
+            'department' => $empDetail?->department?->team_name ?? 'Engineering',
+            'joining_date' => $empDetail?->joining_date?->format('Y-m-d') ?? now()->addDays(7)->format('Y-m-d'),
+            'employment_type' => 'Full Time',
+            'reporting_to' => $empDetail?->reportingTo?->name ?? 'Managing Director',
+            'email' => $employee->email ?? '',
+            'mobile' => $employee->mobile ?? '',
+            'address' => $empDetail?->address ?: 'Saravanampatty, Coimbatore, Tamil Nadu – 641035',
+            'annual_ctc' => $annualCtc,
+            'monthly_takehome' => '₹' . number_format($monthlyTakehome, 2) . ' / month',
+            'other_benefits' => "• Comprehensive Health Insurance for Self & Family\n• Annual Performance Incentive\n• Professional Development & Learning Allowance",
+            'incentives' => 'Performance Bonus up to 10% of Annual CTC evaluated yearly',
+            'probation_period' => '3 Months',
+            'notice_period' => '1 Month',
+            'work_location' => 'BranZo Techno Solution - Head Office, Coimbatore',
+            'working_hours' => '9:30 AM - 6:30 PM (Mon - Sat)',
+            'weekly_off' => 'Sunday',
+            'subject' => 'Offer of Employment - ' . ($empDetail?->designation?->name ?? 'Software Engineer'),
+            'opening_paragraph' => 'We are pleased to offer you employment with BranZo Techno Solution. Based on your qualifications and successful completion of interviews, we believe your skills will be a great asset to our organization.',
+            'terms_conditions' => "1. Confidentiality: You shall maintain strict confidentiality regarding company data, trade secrets, and client information.\n2. Probation Period: Performance will be reviewed prior to completion of the 3 Months probation period.\n3. Notice Period: Termination by either party requires 1 Month written notice or salary in lieu thereof.",
+            'additional_clauses' => "• Equipment Issuance: Company laptop and accessories provided must be returned upon separation.\n• Code of Conduct: Adherence to all internal policies and workplace standards is required.",
+            'acceptance_text' => 'I accept the offer of employment on the terms and conditions outlined in this letter and confirm my joining date as specified above.',
+            'signatory_name' => 'L. Manikandan',
+            'signatory_designation' => 'Head of Human Resources',
+        ];
+
+        return Reply::dataOnly(['status' => 'success', 'offerData' => $data]);
+    }
+
+    public function downloadOfferPdf($id)
+    {
+        $this->viewPermission = $this->getLetterPermission('view_letter', 'view_offer_letter');
+        abort_403($this->viewPermission === 'none');
+
+        $this->letter = Letter::with('user', 'company')->findOrFail($id);
+        $this->company = company() ?: $this->letter->company;
+        $this->offerDetails = $this->letter->offer_details ?: [];
+
+        $this->pageTitle = 'Offer Letter - ' . ($this->letter->employee_name ?: 'Employee');
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->loadView('letter::letter.pdf.offer_pdf', $this->data);
+        return $pdf->download($this->pageTitle . '.pdf');
     }
 
     private function employeeLetterVariable($letter)

@@ -438,31 +438,6 @@
         };
 
 
-        $('body').on('change', '.assign_role', function () {
-            var id = $(this).data('user-id');
-            var role = $(this).val();
-            var token = "{{ csrf_token() }}";
-
-            if (typeof id !== 'undefined') {
-                $.easyAjax({
-                    url: "{{ route('employees.assign_role') }}",
-                    type: "POST",
-                    blockUI: true,
-                    container: '#employees-table',
-                    data: {
-                        role: role,
-                        userId: id,
-                        _token: token
-                    },
-                    success: function (response) {
-                        if (response.status == "success") {
-                            window.LaravelDataTables["employees-table"].draw(true);
-                        }
-                    }
-                })
-            }
-
-        });
 
         $('#designation-setting').click(function () {
             const url = "{{ route('designations.create') }}";

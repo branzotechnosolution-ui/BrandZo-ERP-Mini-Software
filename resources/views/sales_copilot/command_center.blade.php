@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Sales Team Copilot & Deal Closing Intelligence Command Center 💼🤝📄🎯🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Sales Team Copilot & Deal Closing Intelligence Command Center 💼🤝📄🎯🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">88.4% DEAL CLOSE PROBABILITY • 1.42X SALES VELOCITY</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Sales Team Copilot Automation</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Sales Team Copilot Automation</h4>
         <p class="text-muted mb-4">384 Active Sales Copilots → 14,200 Analyzed Calls → 18,400 Generated Proposals (0.42s) → 88.4% Deal Close Probability → 1.42x Sales Velocity → Deal Closing Complete.</p>
         <button class="btn btn-primary btn-sm">Generate Instant Custom Enterprise AI Proposal & Calculate Closing Score</button>
     </div>

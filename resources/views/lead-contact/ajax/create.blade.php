@@ -317,14 +317,14 @@ $currentUser = user();
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="company_name">Company Name <span class="required-star">*</span></label>
-                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="e.g. BrandZo Enterprise" />
+                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="e.g. BranZo Enterprise" />
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="website">Website</label>
-                                <input type="text" class="form-control" id="website" name="website" placeholder="e.g. https://brandzo.in" />
+                                <input type="text" class="form-control" id="website" name="website" placeholder="e.g. https://branzo.in" />
                             </div>
                         </div>
 

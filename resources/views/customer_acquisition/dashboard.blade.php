@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Customer Acquisition & Growth Intelligence Dashboard 🎯🏢📈🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Customer Acquisition & Growth Intelligence Dashboard 🎯🏢📈🚀</h2>
         <span class="badge badge-primary px-3 py-2 f-14">52,000 B2B PROSPECTS • 14.8X LTV/CAC RATIO</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Growth & Acquisition Engine</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Growth & Acquisition Engine</h4>
         <p class="text-muted mb-4">52,000 Verified B2B Prospects → 1,840 Daily AI Leads → 48.2% Demo-to-Trial Conversion → 14.80x LTV/CAC Ratio → Customer Acquisition System Active.</p>
         <button class="btn btn-primary btn-sm">Launch Omnichannel Marketing Campaign & Accelerate Enterprise Acquisition</button>
     </div>

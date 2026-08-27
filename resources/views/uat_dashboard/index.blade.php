@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo User Acceptance Testing & Real Workflow Validation Dashboard 🧪📋👤💼🔁</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo User Acceptance Testing & Real Workflow Validation Dashboard 🧪📋👤💼🔁</h2>
         <span class="badge badge-success px-3 py-2 f-14">100% UAT PASS RATE • 10/10 WORKFLOWS VERIFIED • 0 ISSUES</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System User Acceptance Verification Engine</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System User Acceptance Verification Engine</h4>
         <p class="text-muted mb-4">10 Core Enterprise Workflows → 160 Test Cases Executed → 100% Pass Rate → 0 Open Defect Issues → UAT Verification Complete.</p>
         <button class="btn btn-success btn-sm">Execute Full User Acceptance Testing Suite & Generate Audit Report</button>
     </div>

@@ -147,7 +147,7 @@ $agentUserId = $lead ? ($lead->agent_id ?: $lead->lead_owner) : $currentUser->id
 
                     <div class="col-lg-4 col-md-6 form-group">
                         <label>Email Address</label>
-                        <input type="email" class="form-control" name="client_email" id="client_email" value="{{ $email }}" placeholder="e.g. client@brandzo.in">
+                        <input type="email" class="form-control" name="client_email" id="client_email" value="{{ $email }}" placeholder="e.g. client@branzo.in">
                     </div>
 
                     <div class="col-lg-6 col-md-6 form-group">

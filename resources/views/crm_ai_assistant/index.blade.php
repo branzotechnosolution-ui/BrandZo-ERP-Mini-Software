@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo AI Sales Assistant & Smart Drip Campaign Engine 🤖✉️📱💬📊🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo AI Sales Assistant & Smart Drip Campaign Engine 🤖✉️📱💬📊🚀</h2>
         <span class="badge badge-primary px-3 py-2 f-14">OPEN RATE: 64.20% • REPLY RATE: 38.50% • .45M REVENUE</span>
     </div>
 
@@ -41,7 +41,7 @@
             <div class="bg-white rounded p-4 shadow-sm border-0 h-100">
                 <h4 class="f-18 font-weight-bold text-dark mb-3">1. AI Sales Copilot & Meeting Prep Notes</h4>
                 <div class="p-3 bg-light rounded mb-3">
-                    <p class="mb-1"><strong>Lead Summary:</strong> Enterprise client evaluating BrandZo AI ERP OS for 500+ seats.</p>
+                    <p class="mb-1"><strong>Lead Summary:</strong> Enterprise client evaluating BranZo AI ERP OS for 500+ seats.</p>
                     <p class="mb-1"><strong>Company Analysis:</strong> Fintech / SaaS leader expanding in North America.</p>
                     <p class="mb-1"><strong>Next Best Action:</strong> Schedule executive demo with Head of Architecture.</p>
                     <p class="mb-0"><strong>Meeting Prep Notes:</strong> Focus on SLA guarantees, custom API integrations, ISO 27001 compliance.</p>
@@ -59,7 +59,7 @@
                     </select>
                 </div>
                 <div class="p-2 bg-light rounded f-12 mb-3">
-                    "Hi Alex! Quick follow-up on the BrandZo ERP proposal sent yesterday. Let me know if you have 5 mins for a brief quick call today!"
+                    "Hi Alex! Quick follow-up on the BranZo Techno Solution proposal sent yesterday. Let me know if you have 5 mins for a brief quick call today!"
                 </div>
                 <button class="btn btn-success btn-block btn-sm">Generate AI Smart Reply</button>
             </div>

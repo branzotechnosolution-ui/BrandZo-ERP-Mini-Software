@@ -193,11 +193,14 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                 <x-cards.data-row :label="__('app.mobile')"
                                 :value="$employee->mobile_with_phonecode" />
 
-                                <x-cards.data-row :label="__('modules.employees.slackUsername')"
-                                    :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->slack_username)) ? '@'.$employee->employeeDetail->slack_username : '--'" />
+                                <x-cards.data-row :label="__('modules.employees.annualCtc')"
+                                    :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->annual_ctc)) ? company()->currency->currency_symbol.number_format($employee->employeeDetail->annual_ctc, 2) : '--'" />
 
-                                <x-cards.data-row :label="__('modules.employees.hourlyRate')"
-                                    :value="(!is_null($employee->employeeDetail)) ? company()->currency->currency_symbol.$employee->employeeDetail->hourly_rate : '--'" />
+                                <x-cards.data-row :label="__('modules.employees.takeHome')"
+                                    :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->annual_ctc)) ? company()->currency->currency_symbol.number_format(round($employee->employeeDetail->annual_ctc / 12), 2).' / month' : '--'" />
+
+                                <x-cards.data-row :label="__('modules.employees.experienceYears')"
+                                    :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->experience_years)) ? $employee->employeeDetail->experience_years.' Years' : '--'" />
 
                                 <x-cards.data-row :label="__('app.address')"
                                     :value="$employee->employeeDetail->address ?? '--'" />
@@ -208,14 +211,20 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                 <x-cards.data-row :label="__('app.language')"
                                     :value="$employeeLanguage->language_name ?? '--'" />
 
+                                <x-cards.data-row :label="__('modules.employees.probationPeriod')"
+                                    :value="$employee->employeeDetail->probation_period ?? '--'" />
+
                                 <x-cards.data-row :label="__('modules.employees.probationEndDate')"
-                                :value="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->translatedFormat(company()->date_format) : '--'" />
+                                    :value="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->translatedFormat(company()->date_format) : '--'" />
+
+                                <x-cards.data-row :label="__('modules.employees.noticePeriod')"
+                                    :value="$employee->employeeDetail->notice_period ?? '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.noticePeriodStartDate')"
-                                :value="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->translatedFormat(company()->date_format) : '--'" />
+                                    :value="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->translatedFormat(company()->date_format) : '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.noticePeriodEndDate')"
-                                :value="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->translatedFormat(company()->date_format) : '--'" />
+                                    :value="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->translatedFormat(company()->date_format) : '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.maritalStatus')"
                                 :value="$employee?->employeeDetail?->marital_status ? $employee->employeeDetail->marital_status->label() : '--'" />

@@ -166,11 +166,18 @@ class LeadContactDataTable extends BaseDataTable
         if ($this->request()->type != 'all' && $this->request()->type != '') {
 
             if ($this->request()->type == 'lead') {
-                $leadContact = $leadContact->whereNull('client_id');
-            }
-            else {
+                $leadContact = $leadContact->whereNull('client_id')->where(function($q) {
+                    $q->whereNull('leads.converted')->orWhere('leads.converted', 0);
+                });
+            } elseif ($this->request()->type == 'converted') {
+                $leadContact = $leadContact->where('leads.converted', 1);
+            } else {
                 $leadContact = $leadContact->whereNotNull('client_id');
             }
+        } else {
+            $leadContact = $leadContact->where(function($q) {
+                $q->whereNull('leads.converted')->orWhere('leads.converted', 0);
+            });
         }
 
         if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'created_at') {

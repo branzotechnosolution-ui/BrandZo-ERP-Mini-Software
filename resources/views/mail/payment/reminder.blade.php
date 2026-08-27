@@ -3,8 +3,7 @@
 
 # @lang('app.invoiceDetails') -
 
-@component('mail::text', ['text' => $content])
-@endcomponent
+{!! $content !!}
 
 @component('mail::button', ['url' => $paymentUrl, 'themeColor' => $themeColor])
     @lang('app.viewInvoices')

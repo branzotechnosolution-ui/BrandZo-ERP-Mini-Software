@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Customer Success & Retention Intelligence Command Center 🛡️❤️💎📊🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Customer Success & Retention Intelligence Command Center 🛡️❤️💎📊🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">142.8% NET REVENUE RETENTION • 0.42% CHURN RATE</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Customer Success System</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Customer Success System</h4>
         <p class="text-muted mb-4">18,400 Managed Accounts → 96.8/100 Average Health Score → 0.42% Annual Churn → 98.4% Contract Renewal Rate → 142.8% NRR → Retention Active.</p>
         <button class="btn btn-success btn-sm">Trigger Proactive Enterprise Account Health Scan & View Expansion Opportunities</button>
     </div>

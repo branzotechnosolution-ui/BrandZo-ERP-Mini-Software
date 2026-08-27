@@ -619,6 +619,13 @@ class AttendanceController extends AccountBaseController
         $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->company->timezone);
         $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->company->timezone);
 
+        if ($this->attendanceSettings && $this->attendanceSettings->shift_name != 'Day Off') {
+            $maxLateLoginCutoff = $officeStartTime->copy()->addMinutes(29)->endOfMinute();
+            if ($clockIn->gt($maxLateLoginCutoff) && !user()->isAdmin()) {
+                return Reply::error(__('Shift login rejected. Late login is allowed only up to 30 minutes after shift start time (until ' . $maxLateLoginCutoff->format('h:i A') . '). Logged time ' . $clockIn->format('h:i A') . ' is invalid.'));
+            }
+        }
+
         if ($this->attendanceSettings->shift_type == 'strict') {
             $clockInCount = Attendance::getTotalUserClockInWithTime($officeStartTime, $officeEndTime, $request->user_id);
         } else {
@@ -2187,7 +2194,6 @@ class AttendanceController extends AccountBaseController
         try {
             $user = user();
             $today = now()->toDateString();
-            $testMode = config('app.hrms_attendance_test_mode', env('HRMS_ATTENDANCE_TEST_MODE', true));
 
             $activeAttendance = Attendance::where('user_id', $user->id)
                 ->whereDate('clock_in_time', $today)
@@ -2199,15 +2205,13 @@ class AttendanceController extends AccountBaseController
                 return response()->json(['status' => 'error', 'message' => __('You are already checked in.')], 400);
             }
 
-            if (!$testMode) {
-                $completedToday = Attendance::where('user_id', $user->id)
-                    ->whereDate('clock_in_time', $today)
-                    ->whereNotNull('clock_out_time')
-                    ->first();
+            $completedToday = Attendance::where('user_id', $user->id)
+                ->whereDate('clock_in_time', $today)
+                ->whereNotNull('clock_out_time')
+                ->first();
 
-                if ($completedToday) {
-                    return response()->json(['status' => 'error', 'message' => __('You have already checked out for today.')], 400);
-                }
+            if ($completedToday) {
+                return response()->json(['status' => 'error', 'message' => __('You have already completed check-in and check-out for today. Only one check-in per day is allowed.')], 400);
             }
 
             $attendance = new Attendance();
@@ -2236,11 +2240,11 @@ class AttendanceController extends AccountBaseController
                 ->first();
 
             if (!$attendance) {
-                return response()->json(['status' => 'error', 'message' => __('No active check-in found for today.')], 400);
+                return response()->json(['status' => 'error', 'message' => __('No active check-in found to check out.')], 400);
             }
 
             if ($attendance->activeBreak()->exists()) {
-                return response()->json(['status' => 'error', 'message' => __('Please end your break before checking out.')], 400);
+                return response()->json(['status' => 'error', 'message' => __('You are currently on an active break. Please end your break before checking out.')], 400);
             }
 
             $now = now();
@@ -2267,11 +2271,11 @@ class AttendanceController extends AccountBaseController
                 ->first();
 
             if (!$attendance) {
-                return response()->json(['status' => 'error', 'message' => __('Cannot start break because attendance record not found.')], 400);
+                return response()->json(['status' => 'error', 'message' => __('Cannot start break because no active check-in was found.')], 400);
             }
 
             if ($attendance->activeBreak()->exists()) {
-                return response()->json(['status' => 'error', 'message' => __('You already have an active break.')], 400);
+                return response()->json(['status' => 'error', 'message' => __('You already have an active break. Please end your active break first.')], 400);
             }
 
             \App\Models\AttendanceBreak::create([
@@ -2297,7 +2301,7 @@ class AttendanceController extends AccountBaseController
                 ->first();
 
             if (!$attendance) {
-                return response()->json(['status' => 'error', 'message' => __('Cannot end break because attendance record not found.')], 400);
+                return response()->json(['status' => 'error', 'message' => __('Cannot end break because no active check-in was found.')], 400);
             }
 
             $activeBreak = $attendance->activeBreak;

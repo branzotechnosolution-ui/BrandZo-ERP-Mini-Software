@@ -1,1 +1,1 @@
-<!-- Update notifications disabled for BrandZo ERP -->
+<!-- Update notifications disabled for BranZo Techno Solution -->

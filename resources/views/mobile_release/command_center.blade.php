@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Mobile App Store Production Launch Command Center 📱🍎🤖🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Mobile App Store Production Launch Command Center 📱🍎🤖🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">99.98% CRASH-FREE USERS • iOS & PLAY STORE APPROVED</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Mobile Super-App Launch Engine</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Mobile Super-App Launch Engine</h4>
         <p class="text-muted mb-4">v3.4.0 Build 142 → 4,800 Active Beta Testers → 99.98% Crash-Free Rate → 4.2 Min CI/CD Build → iOS & Android Store Approved → Mobile Production Live.</p>
         <button class="btn btn-success btn-sm">Trigger Automated Fastlane Production Mobile Build & Broadcast Broadcast Push</button>
     </div>

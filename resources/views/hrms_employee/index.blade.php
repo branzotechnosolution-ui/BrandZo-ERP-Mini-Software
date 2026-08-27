@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Enterprise HRMS - Employee Management Core 👔📁🏛️🏷️📊</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Enterprise HRMS - Employee Management Core 👔📁🏛️🏷️📊</h2>
         <span class="badge badge-primary px-3 py-2 f-14">184 ACTIVE EMPLOYEES • 8 DEPARTMENTS • 100% COMPLIANT</span>
     </div>
 
@@ -117,7 +117,7 @@
                 <tr>
                     <td><strong>EMP-2026-9942</strong></td>
                     <td>Vikramaditya Sharma</td>
-                    <td>vikram@brandzo.in</td>
+                    <td>vikram@branzo.in</td>
                     <td>Engineering & AI</td>
                     <td>Lead Software Architect</td>
                     <td>,000.00</td>

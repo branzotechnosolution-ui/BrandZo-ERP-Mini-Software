@@ -36,7 +36,7 @@
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
         <h4 class="f-18 font-weight-bold text-dark mb-3">Universal AI Intelligence Core, Strategic Decision Engine & Agent Orchestration</h4>
-        <p class="text-muted mb-4">Unifying all BrandZo intelligence systems into a cross-module reasoning engine with real-time orchestration of 520,000 AI agents and global company memory.</p>
+        <p class="text-muted mb-4">Unifying all BranZo intelligence systems into a cross-module reasoning engine with real-time orchestration of 520,000 AI agents and global company memory.</p>
         <button class="btn btn-primary btn-sm">Execute Universal Strategic Decision</button>
     </div>
 </div>

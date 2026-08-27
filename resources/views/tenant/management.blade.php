@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>BrandZo Techno Solution</td>
+                        <td>BranZo Techno Solution</td>
                         <td>Global Enterprise</td>
                         <td>120 Users</td>
                         <td>420 GB</td>

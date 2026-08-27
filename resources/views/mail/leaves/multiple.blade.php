@@ -1,9 +1,7 @@
 @component('mail::message')
 # @lang('email.leave.applied')
 
-@component('mail::text', ['text' => $content])
-
-@endcomponent
+{!! $content !!}
 
 @if (!empty($url))
     @component('mail::button', ['url' => $url, 'themeColor' => ((!empty($themeColor)) ? $themeColor : '#1f75cb')])

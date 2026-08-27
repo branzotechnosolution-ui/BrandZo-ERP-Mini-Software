@@ -27,7 +27,7 @@ class BrandZoAiSalesAssistantService
     {
         $lead = Lead::find($leadId);
         $name = $lead->client_name ?? 'Client';
-        $company = 'BrandZo ERP';
+        $company = 'BranZo Techno Solution';
 
         return "Dear {$name},\n\nThank you for exploring {$company} solutions. We would love to discuss how our enterprise automation platform can streamline your business workflows.\n\nBest regards,\nSales Team";
     }
@@ -37,6 +37,6 @@ class BrandZoAiSalesAssistantService
         $lead = Lead::find($leadId);
         $name = $lead->client_name ?? 'Client';
 
-        return "Hi {$name}, thanks for reaching out to BrandZo ERP! Let us know if you would like to schedule a quick 10-minute demo today.";
+        return "Hi {$name}, thanks for reaching out to BranZo Techno Solution! Let us know if you would like to schedule a quick 10-minute demo today.";
     }
 }

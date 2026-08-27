@@ -24,7 +24,7 @@ $addDepartmentPermission = user()->permission('add_department');
                             <div class="col-md-2">
                                 <x-forms.text fieldId="employee_id" :fieldLabel="__('modules.employees.employeeId')"
                                     fieldName="employee_id" :fieldValue="$employee->employeeDetail->employee_id"
-                                    fieldRequired="true" :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')">
+                                    fieldRequired="true" :fieldReadOnly="true" :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')">
                                 </x-forms.text>
                             </div>
                             <div class="col-md-2">
@@ -150,7 +150,6 @@ $addDepartmentPermission = user()->permission('add_department');
                             <input type="tel" class="form-control height-35 f-14" placeholder="@lang('placeholders.mobile')"
                                 name="mobile" id="mobile" value="{{ $employee->mobile }}" maxlength="10" inputmode="numeric" autocomplete="off">
                         </x-forms.input-group>
-                        <small class="form-text text-muted">@lang('modules.employees.mobileDigitsHint')</small>
                     </div>
                     <div class="col-md-4 state-field-wrapper">
                         <x-forms.select fieldId="state" :fieldLabel="__('app.state')" fieldName="state" search="true">
@@ -279,22 +278,8 @@ $addDepartmentPermission = user()->permission('add_department');
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <x-forms.label class="my-3" fieldId="hourly_rate"
-                            :fieldLabel="__('modules.employees.hourlyRate')"></x-forms.label>
-                        <x-forms.input-group>
-                            <x-slot name="prepend">
-                                <span
-                                    class="input-group-text f-14 bg-white-shade">{{ company()->currency->currency_symbol }}</span>
-                            </x-slot>
-
-                            <input type="number" step=".01" min="0" class="form-control height-35 f-14"
-                                value="{{ $employee->employeeDetail->hourly_rate ?? '' }}" name="hourly_rate"
-                                id="hourly_rate">
-                        </x-forms.input-group>
-                    </div>
-
-                    <div class="col-md-4">
+                    <!-- REDESIGNED OTHER DETAILS SALARY & PROBATION/NOTICE GRID -->
+                    <div class="col-lg-3 col-md-6">
                         <x-forms.label class="my-3" fieldId="annual_ctc"
                             :fieldLabel="__('modules.employees.annualCtc')"></x-forms.label>
                         <x-forms.input-group>
@@ -305,32 +290,81 @@ $addDepartmentPermission = user()->permission('add_department');
 
                             <input type="number" step=".01" min="0" class="form-control height-35 f-14"
                                 value="{{ $employee->employeeDetail->annual_ctc ?? '' }}" name="annual_ctc"
-                                id="annual_ctc" placeholder="@lang('modules.employees.annualCtcPlaceholder')">
+                                id="annual_ctc" placeholder="e.g. 560000">
                         </x-forms.input-group>
-                        <small class="form-text text-muted">@lang('modules.employees.annualCtcHint')</small>
+                        <small class="form-text text-muted">Annual Cost to Company</small>
                     </div>
 
-                    <div class="col-md-4">
-                        <x-forms.label class="my-3" fieldId="experience_years"
-                            :fieldLabel="__('modules.employees.experienceYears')"></x-forms.label>
-                        <input type="number" step="0.1" min="0" max="50" class="form-control height-35 f-14"
-                            value="{{ $employee->employeeDetail->experience_years ?? '' }}" name="experience_years"
-                            id="experience_years" placeholder="@lang('modules.employees.experienceYearsPlaceholder')">
-                        <small class="form-text text-muted">@lang('modules.employees.experienceYearsHint')</small>
-                    </div>
-
-                    <div class="col-md-4">
-                        <x-forms.label class="my-3" fieldId="slack_username"
-                            :fieldLabel="__('modules.employees.slackUsername')"></x-forms.label>
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.label class="my-3" fieldId="take_home"
+                            :fieldLabel="__('modules.employees.takeHome')"></x-forms.label>
                         <x-forms.input-group>
                             <x-slot name="prepend">
-                                <span class="input-group-text f-14 bg-white-shade">@</span>
+                                <span
+                                    class="input-group-text f-14 bg-white-shade">{{ company()->currency->currency_symbol }}</span>
                             </x-slot>
 
-                            <input type="text" class="form-control height-35 f-14" autocomplete="off"
-                                value="{{ $employee->employeeDetail->slack_username ?? '' }}" name="slack_username"
-                                id="slack_username">
+                            <input type="text" class="form-control height-35 f-14 bg-light text-primary font-weight-bold"
+                                value="{{ isset($employee->employeeDetail->annual_ctc) && $employee->employeeDetail->annual_ctc > 0 ? '₹' . number_format(round($employee->employeeDetail->annual_ctc / 12), 0) . ' / month' : '' }}"
+                                name="take_home" id="take_home" readonly placeholder="Calculated monthly take home">
                         </x-forms.input-group>
+                        <small class="form-text text-primary">Calculated approx. monthly salary</small>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.label class="my-3" fieldId="experience_years"
+                            fieldLabel="Experience Years"></x-forms.label>
+                        <input type="number" step="0.1" min="0" max="50" class="form-control height-35 f-14"
+                            value="{{ $employee->employeeDetail->experience_years ?? '' }}" name="experience_years"
+                            id="experience_years" placeholder="e.g. 2.5">
+                        <small class="form-text text-muted">Total relevant experience in years</small>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.select fieldId="probation_period" fieldLabel="Probation Period"
+                            fieldName="probation_period">
+                            <option value="">-- Select Probation Period --</option>
+                            @foreach (['1 Month', '2 Months', '3 Months', '4 Months', '5 Months', '6 Months', '7 Months', '12 Months'] as $pPeriod)
+                                <option value="{{ $pPeriod }}" {{ (isset($employee->employeeDetail->probation_period) && $employee->employeeDetail->probation_period == $pPeriod) ? 'selected' : '' }}>{{ $pPeriod }}</option>
+                            @endforeach
+                        </x-forms.select>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.label class="my-3" fieldId="probation_end_date"
+                            fieldLabel="Probation End Date"></x-forms.label>
+                        <input type="text" class="form-control height-35 f-14 bg-light"
+                            value="{{ $employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->format(company()->date_format) : '' }}"
+                            name="probation_end_date" id="probation_end_date" readonly placeholder="Calculated from joining date">
+                        <small class="form-text text-muted">Auto-calculated from joining date</small>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.select fieldId="notice_period" fieldLabel="Notice Period"
+                            fieldName="notice_period">
+                            <option value="">-- Select Notice Period --</option>
+                            @foreach (['1 Month', '2 Months'] as $nPeriod)
+                                <option value="{{ $nPeriod }}" {{ (isset($employee->employeeDetail->notice_period) && $employee->employeeDetail->notice_period == $nPeriod) ? 'selected' : '' }}>{{ $nPeriod }}</option>
+                            @endforeach
+                        </x-forms.select>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.label class="my-3" fieldId="notice_period_start_date"
+                            :fieldLabel="__('modules.employees.noticePeriodStartDate')"></x-forms.label>
+                        <input type="text" class="form-control height-35 f-14 bg-light"
+                            value="{{ $employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->format(company()->date_format) : '' }}"
+                            name="notice_period_start_date" id="notice_period_start_date" readonly placeholder="Locked until notice starts">
+                        <small class="form-text text-muted">Locked until notice period starts</small>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.label class="my-3" fieldId="notice_period_end_date"
+                            :fieldLabel="__('modules.employees.noticePeriodEndDate')"></x-forms.label>
+                        <input type="text" class="form-control height-35 f-14 bg-light"
+                            value="{{ $employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->format(company()->date_format) : '' }}"
+                            name="notice_period_end_date" id="notice_period_end_date" readonly placeholder="Locked until notice starts">
+                        <small class="form-text text-muted">Locked until notice period starts</small>
                     </div>
 
                     <div class="col-md-12">
@@ -356,26 +390,6 @@ $addDepartmentPermission = user()->permission('add_department');
                             </p>
                         </div>
                     @endif
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.datepicker fieldId="probation_end_date" :fieldLabel="__('modules.employees.probationEndDate')"
-                            fieldName="probation_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->format(company()->date_format) : '' "
-                            :popover="__('messages.probationEndDate')"/>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.datepicker fieldId="notice_period_start_date" :fieldLabel="__('modules.employees.noticePeriodStartDate')"
-                            fieldName="notice_period_start_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->format(company()->date_format) : '' "
-                            :popover="__('messages.noticePeriodStartDate')"/>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.datepicker fieldId="notice_period_end_date" :fieldLabel="__('modules.employees.noticePeriodEndDate')"
-                            fieldName="notice_period_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->format(company()->date_format) : '' "
-                            :popover="__('messages.noticePeriodEndDate')"/>
-                    </div>
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="employment_type" :fieldLabel="__('modules.employees.employmentType')"
                             fieldName="employment_type" :fieldPlaceholder="__('placeholders.date')">
@@ -831,10 +845,61 @@ $addDepartmentPermission = user()->permission('add_department');
             toggleStateDistrictFieldsEdit('', '');
         });
 
-        // Initialize with existing saved values
-        toggleStateDistrictFieldsEdit(savedState, savedDistrict);
+        // Real-time calculation: Annual CTC -> Take Home
+        $('#annual_ctc').on('input change', function() {
+            let ctc = parseFloat($(this).val()) || 0;
+            if (ctc > 0) {
+                let monthly = Math.round(ctc / 12);
+                let formatted = '₹' + monthly.toLocaleString('en-IN') + ' / month';
+                $('#take_home').val(formatted);
+            } else {
+                $('#take_home').val('');
+            }
+        });
 
-        <x-forms.custom-field-filejs/>
+        // Helper function for adding months to DD-MM-YYYY date string
+        function addMonthsToDateStr(dateStr, months) {
+            if (!dateStr) return '';
+            let parts = dateStr.split('-');
+            if (parts.length === 3) {
+                let day, month, year;
+                if (parts[0].length === 4) {
+                    year = parseInt(parts[0]);
+                    month = parseInt(parts[1]) - 1;
+                    day = parseInt(parts[2]);
+                } else {
+                    day = parseInt(parts[0]);
+                    month = parseInt(parts[1]) - 1;
+                    year = parseInt(parts[2]);
+                }
+                let dt = new Date(year, month, day);
+                dt.setMonth(dt.getMonth() + months);
+                let d = String(dt.getDate()).padStart(2, '0');
+                let m = String(dt.getMonth() + 1).padStart(2, '0');
+                let y = dt.getFullYear();
+                return `${d}-${m}-${y}`;
+            }
+            return '';
+        }
+
+        // Real-time calculation: Joining Date + Probation Period -> Probation End Date
+        function updateProbationEndDate() {
+            let joining = $('#joining_date').val();
+            let probation = $('#probation_period').val();
+            if (joining && probation) {
+                let mMatch = probation.match(/\d+/);
+                if (mMatch) {
+                    let months = parseInt(mMatch[0]);
+                    let calcDate = addMonthsToDateStr(joining, months);
+                    $('#probation_end_date').val(calcDate);
+                    return;
+                }
+            }
+        }
+
+        $('#joining_date, #probation_period').on('change input', function() {
+            updateProbationEndDate();
+        });
 
         init(RIGHT_MODAL);
     });

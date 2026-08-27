@@ -119,8 +119,8 @@ class EmployeeController extends AccountBaseController
 
         $this->skills = Skill::all()->pluck('name')->toArray();
         $this->countries = countries();
-        $this->lastEmployeeID = EmployeeDetails::count();
-        $this->checkifExistEmployeeId = EmployeeDetails::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
+        $this->lastEmployeeID = self::generateNextEmployeeId();
+        $this->checkifExistEmployeeId = false;
         $this->employees = User::allEmployees(null, true);
         $this->languages = LanguageSetting::where('status', 'enabled')->get();
         $this->salutations = Salutation::cases();
@@ -180,31 +180,7 @@ class EmployeeController extends AccountBaseController
 
     public function assignRole(Request $request)
     {
-        $changeEmployeeRolePermission = user()->permission('change_employee_role');
-
-        abort_403($changeEmployeeRolePermission != 'all');
-
-        $userId = $request->userId;
-        $roleId = $request->role;
-        $employeeRole = Role::where('name', 'employee')->first();
-
-        $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($userId);
-
-        RoleUser::where('user_id', $user->id)->delete();
-        $user->roles()->attach($employeeRole->id);
-
-        if ($employeeRole->id != $roleId) {
-            $user->roles()->attach($roleId);
-        }
-
-        $user->assignUserRolePermission($roleId);
-
-        $userSession = new AppSettingController();
-        $userSession->deleteSessions([$user->id]);
-
-        cache()->forget('sidebar_user_perms_' . $user->id);
-
-        return Reply::success(__('messages.roleAssigned'));
+        return Reply::error('Inline role editing is disabled. User Role can only be changed by editing the employee details.');
     }
 
     /**
@@ -525,27 +501,30 @@ class EmployeeController extends AccountBaseController
 
         cache()->forget('user_is_active_' . $user->id);
 
-        $roleId = request()->role;
+        $roleId = $request->role;
 
-        $userRole = Role::where('id', request()->role)->first();
+        if (!empty($roleId)) {
+            $userRole = Role::where('id', $roleId)->first();
 
-        if ($roleId != '' && $userRole->name != $user->user_other_role) {
+            if ($userRole) {
+                $employeeRole = Role::where('name', 'employee')->first();
+                $targetUser = User::withoutGlobalScope(ActiveScope::class)->findOrFail($user->id);
 
-            $employeeRole = Role::where('name', 'employee')->first();
+                DB::table('role_user')->where('user_id', $targetUser->id)->delete();
+                $targetUser->roles()->attach($employeeRole->id);
 
-            $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($user->id);
+                if ($employeeRole->id != $roleId) {
+                    $targetUser->roles()->attach($roleId);
+                }
 
-            RoleUser::where('user_id', $user->id)->delete();
-            $user->roles()->attach($employeeRole->id);
+                $targetUser->assignUserRolePermission($roleId);
 
-            if ($employeeRole->id != $roleId) {
-                $user->roles()->attach($roleId);
+                $userSession = new AppSettingController();
+                $userSession->deleteSessions([$targetUser->id]);
+
+                cache()->forget('sidebar_user_perms_' . $targetUser->id);
+                cache()->forget('user_is_active_' . $targetUser->id);
             }
-
-            $user->assignUserRolePermission($roleId);
-
-            $userSession = new AppSettingController();
-            $userSession->deleteSessions([$user->id]);
         }
 
         $tags = json_decode($request->tags);
@@ -1197,20 +1176,39 @@ class EmployeeController extends AccountBaseController
         return Reply::successWithData(__('messages.inviteLinkSuccess'), ['link' => route('invitation', $invite->invitation_code)]);
     }
 
+    public static function generateNextEmployeeId()
+    {
+        $maxNumeric = 0;
+        $allIds = EmployeeDetails::whereNotNull('employee_id')->pluck('employee_id');
+        foreach ($allIds as $id) {
+            $num = (int) preg_replace('/[^0-9]/', '', $id);
+            if ($num > $maxNumeric) {
+                $maxNumeric = $num;
+            }
+        }
+        $next = $maxNumeric + 1;
+        return str_pad($next, 3, '0', STR_PAD_LEFT);
+    }
+
     /**
      * @param mixed $request
      * @param mixed $employee
      */
     public function employeeData($request, $employee): void
     {
-        $employee->employee_id = $request->employee_id;
+        if (!$employee->exists || empty($employee->employee_id)) {
+            $employee->employee_id = self::generateNextEmployeeId();
+        }
+
         $employee->address = $request->address;
         $employee->state = $request->state;
         $employee->district = $request->district;
-        $employee->hourly_rate = $request->hourly_rate;
+        $employee->hourly_rate = null;
         $employee->annual_ctc = $request->annual_ctc;
         $employee->experience_years = $request->experience_years;
-        $employee->slack_username = $request->slack_username;
+        $employee->probation_period = $request->probation_period;
+        $employee->notice_period = $request->notice_period;
+        $employee->slack_username = null;
         $employee->department_id = $request->department;
         $employee->designation_id = $request->designation;
         $employee->company_address_id = $request->company_address;
@@ -1219,9 +1217,44 @@ class EmployeeController extends AccountBaseController
         $employee->joining_date = companyToYmd($request->joining_date);
         $employee->date_of_birth = $request->date_of_birth ? companyToYmd($request->date_of_birth) : null;
         $employee->calendar_view = 'task,events,holiday,tickets,leaves,follow_ups';
-        $employee->probation_end_date = $request->probation_end_date ? companyToYmd($request->probation_end_date) : null;
-        $employee->notice_period_start_date = $request->notice_period_start_date ? companyToYmd($request->notice_period_start_date) : null;
-        $employee->notice_period_end_date = $request->notice_period_end_date ? companyToYmd($request->notice_period_end_date) : null;
+
+        $companyObj = $this->company ?? company();
+
+        // Probation end date calculation based on probation_period and joining_date
+        if ($request->joining_date && $request->probation_period) {
+            $monthsMatch = preg_replace('/[^0-9]/', '', $request->probation_period);
+            if (!empty($monthsMatch)) {
+                $joiningCarbon = Carbon::createFromFormat($companyObj->date_format, $request->joining_date, $companyObj->timezone);
+                $employee->probation_end_date = $joiningCarbon->addMonths((int)$monthsMatch)->format('Y-m-d');
+            } else if ($request->probation_end_date) {
+                $employee->probation_end_date = companyToYmd($request->probation_end_date);
+            }
+        } elseif ($request->probation_end_date) {
+            $employee->probation_end_date = companyToYmd($request->probation_end_date);
+        } else {
+            $employee->probation_end_date = null;
+        }
+
+        // Notice period dates workflow
+        if ($request->notice_period_start_date) {
+            $noticeStartCarbon = Carbon::createFromFormat($companyObj->date_format, $request->notice_period_start_date, $companyObj->timezone);
+            $employee->notice_period_start_date = $noticeStartCarbon->format('Y-m-d');
+
+            if ($request->notice_period) {
+                $noticeMonthsMatch = preg_replace('/[^0-9]/', '', $request->notice_period);
+                if (!empty($noticeMonthsMatch)) {
+                    $employee->notice_period_end_date = $noticeStartCarbon->copy()->addMonths((int)$noticeMonthsMatch)->format('Y-m-d');
+                } else if ($request->notice_period_end_date) {
+                    $employee->notice_period_end_date = companyToYmd($request->notice_period_end_date);
+                }
+            } elseif ($request->notice_period_end_date) {
+                $employee->notice_period_end_date = companyToYmd($request->notice_period_end_date);
+            }
+        } else {
+            $employee->notice_period_start_date = null;
+            $employee->notice_period_end_date = null;
+        }
+
         $employee->marital_status = $request->marital_status;
         $employee->marriage_anniversary_date = $request->marriage_anniversary_date ? companyToYmd($request->marriage_anniversary_date) : null;
         $employee->employment_type = $request->employment_type;

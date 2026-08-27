@@ -6,9 +6,7 @@
 
 <h5>@lang('app.projectDetails')</h5>
 
-@component('mail::text', ['text' => $content])
-
-@endcomponent
+{!! $content !!}
 
 @component('mail::button', ['url' => $url, 'themeColor' => $themeColor])
 @lang('app.viewProject')

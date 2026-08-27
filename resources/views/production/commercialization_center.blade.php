@@ -36,7 +36,7 @@
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
         <h4 class="f-18 font-weight-bold text-dark mb-3">Enterprise Multi-Tenant SaaS, Real AI RAG Pipeline & Mobile App Launch</h4>
-        <p class="text-muted mb-4">Converting BrandZo ERP into a commercial enterprise SaaS product with AWS/GCP Kubernetes load balancing, multi-tenant isolation, real AI provider routing, Razorpay/Stripe billing with automated GST invoices, SOC2 compliance, and published iOS/Android mobile applications.</p>
+        <p class="text-muted mb-4">Converting BranZo Techno Solution into a commercial enterprise SaaS product with AWS/GCP Kubernetes load balancing, multi-tenant isolation, real AI provider routing, Razorpay/Stripe billing with automated GST invoices, SOC2 compliance, and published iOS/Android mobile applications.</p>
         <button class="btn btn-primary btn-sm">Deploy Production Tenant</button>
     </div>
 </div>

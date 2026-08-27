@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo CRM Dashboard</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo CRM Dashboard</h2>
     </div>
 
     <div class="row">

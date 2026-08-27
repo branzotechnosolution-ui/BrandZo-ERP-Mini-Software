@@ -402,11 +402,11 @@ class DealController extends AccountBaseController
 
         if ($originalLead) {
             try {
-                \Illuminate\Support\Facades\DB::table('deals')->where('id', $deal->id)->update(['lead_contact_id' => null, 'lead_id' => null]);
                 \App\Models\DealFollowUp::where('lead_id', $originalLead->id)->update(['deal_id' => $deal->id]);
-                $originalLead->forceDelete();
+                $originalLead->converted = 1;
+                $originalLead->save();
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Lead deletion error: ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Lead conversion mark error: ' . $e->getMessage());
             }
         }
 
@@ -1153,6 +1153,13 @@ class DealController extends AccountBaseController
 
             $deal = Deal::with(['contact', 'leadAgent.user', 'pipeline'])->findOrFail($request->deal_id);
 
+            if (!empty($deal->client_id) || $deal->create_client == 'yes') {
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => __('This deal has already been converted to a client profile.')
+                ], 400);
+            }
+
             // 1. Prevent Duplicate Client Creation: Check existing User by email or company_name
             $clientUser = User::where('email', $request->email)->first();
             if (!$clientUser && $request->filled('company_name')) {
@@ -1213,8 +1220,18 @@ class DealController extends AccountBaseController
             $clientDetails->last_updated_by = user()->id;
 
             if (empty($clientDetails->client_id)) {
-                $nextId = (\DB::table('client_details')->max('id') ?: 0) + 1;
-                $clientDetails->client_id = 'BZCL' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
+                $maxNum = 0;
+                $existingClientIds = \DB::table('client_details')->whereNotNull('client_id')->pluck('client_id');
+                foreach ($existingClientIds as $cid) {
+                    if (preg_match('/BZCL(\d+)/i', $cid, $matches)) {
+                        $num = (int)$matches[1];
+                        if ($num > $maxNum) {
+                            $maxNum = $num;
+                        }
+                    }
+                }
+                $nextNum = $maxNum + 1;
+                $clientDetails->client_id = 'BZCL' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
             }
             $clientDetails->save();
 

@@ -56,52 +56,33 @@ class EmployeesDataTable extends BaseDataTable
             $userRole = $row->roles->pluck('name')->toArray();
 
             if (in_array('admin', $userRole)) {
-                return $row->roles()->withoutGlobalScopes()->latest()->first()->display_name;
+                $adminRole = $row->roles->where('name', 'admin')->first();
+                return $adminRole ? $adminRole->display_name : 'App Administrator';
             }
 
-            return !empty($row->current_role_name) ? $row->current_role_name : $row->roles->pluck('display_name')->last();
-        });
-        $datatables->addColumn('role', function ($row) use ($roles) {
-            $userRole = $row->roles->pluck('name')->toArray();
-
-            if (in_array('admin', $userRole)) {
-                $uRole = $row->roles()->withoutGlobalScopes()->latest()->first()->display_name;
-            } else {
-                $uRole = $row->current_role_name;
-            }
-
-            if (in_array('admin', $userRole) && !in_array('admin', user_roles())) {
-                return $uRole . ' <i data-toggle="tooltip" data-original-title="' . __('messages.roleCannotChange') . '" class="fa fa-info-circle"></i>';
-            }
-
-            if ($row->id == user()->id) {
-                return $uRole . ' <i data-toggle="tooltip" data-original-title="' . __('messages.roleCannotChange') . '" class="fa fa-info-circle"></i>';
-            }
-
-            $role = '<select class="form-control select-picker assign_role" data-user-id="' . $row->id . '" data-size="3">';
-
-            foreach ($roles as $item) {
-                if (
-                    $item->name != 'admin'
-                    || ($item->name == 'admin' && in_array('admin', user_roles()))
-                ) {
-
-                    $role .= '<option ';
-
-                    if (
-                        (in_array($item->name, $userRole) && $item->name == 'admin')
-                        || (in_array($item->name, $userRole) && !in_array('admin', $userRole))
-                    ) {
-                        $role .= 'selected';
-                    }
-
-                    $role .= ' value="' . $item->id . '">' . $item->display_name . '</option>';
+            foreach ($row->roles as $role) {
+                if ($role->name != 'employee' && $role->name != 'client') {
+                    return $role->display_name;
                 }
             }
 
-            $role .= '</select>';
+            return 'Employee';
+        });
+        $datatables->addColumn('role', function ($row) {
+            $userRole = $row->roles->pluck('name')->toArray();
 
-            return $role;
+            if (in_array('admin', $userRole)) {
+                $adminRole = $row->roles->where('name', 'admin')->first();
+                return $adminRole ? $adminRole->display_name : 'App Administrator';
+            }
+
+            foreach ($row->roles as $role) {
+                if ($role->name != 'employee' && $role->name != 'client') {
+                    return $role->display_name;
+                }
+            }
+
+            return 'Employee';
         });
         $datatables->addColumn('action', function ($row) {
             $userRole = $row->roles->pluck('name')->toArray();
@@ -115,6 +96,7 @@ class EmployeesDataTable extends BaseDataTable
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
             $action .= '<a href="' . route('employees.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+            $action .= '<a href="' . route('letter.generate.create') . '?employee_id=' . $row->id . '" class="dropdown-item openRightModal"><i class="fa fa-file-signature mr-2 text-primary"></i>Create Offer Letter</a>';
 
             if (
                 $this->editEmployeePermission == 'all'

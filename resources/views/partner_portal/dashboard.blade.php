@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Partner & Reseller Network Portal ⭐🤝🌎💰</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Partner & Reseller Network Portal ⭐🤝🌎💰</h2>
         <span class="badge badge-success px-3 py-2 f-14">TIER-1 CERTIFIED GLOBAL PARTNER (.82M COMMISSIONS)</span>
     </div>
 

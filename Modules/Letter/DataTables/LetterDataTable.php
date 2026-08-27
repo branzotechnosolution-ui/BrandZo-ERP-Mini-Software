@@ -37,12 +37,7 @@ class LetterDataTable extends BaseDataTable
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-            $action .= '<a href="' . route('letter.generate.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
-            $action .= '<a href="' . route('letter.download', $row->id) . '" class="dropdown-item"><i class="fa fa-download mr-2"></i>' . __('app.download') . '</a>';
-
-            if ($this->addPermission != 'none') {
-                $action .= '<a href="' . route('letter.generate.create') . '?letterId=' . $row->id . '" class="dropdown-item openRightModal"><i class="fa fa-clone mr-2"></i>' . __('app.duplicate') . '</a>';
-            }
+            $action .= '<a href="' . route('letter.download.offer-pdf', $row->id) . '" class="dropdown-item" target="_blank"><i class="fa fa-file-pdf mr-2 text-danger"></i>' . __('Download Offer PDF') . '</a>';
 
             if ($this->editPermission != 'none') {
                 $action .= '<a href="' . route('letter.generate.edit', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-edit mr-2"></i>' . __('app.edit') . '</a>';
@@ -58,11 +53,21 @@ class LetterDataTable extends BaseDataTable
 
             return $action;
         })
+        ->addColumn('status', function($row) {
+            $st = $row->status ?: 'generated';
+            if ($st == 'draft') {
+                return '<span class="badge badge-warning text-dark px-2 py-1"><i class="fa fa-edit mr-1"></i>Draft</span>';
+            } elseif ($st == 'sent') {
+                return '<span class="badge badge-success px-2 py-1"><i class="fa fa-paper-plane mr-1"></i>Sent</span>';
+            }
+            return '<span class="badge badge-info px-2 py-1"><i class="fa fa-check-circle mr-1"></i>Generated</span>';
+        })
         ->editColumn('template_id', function($row){
-            return '<a href="' . route('letter.generate.show', [$row->id]) . '" class="text-darkest-grey openRightModal">' . $row->template->title . '</a>';
+            $type = !empty($row->offer_details['subject']) ? $row->offer_details['subject'] : ($row->template->title ?? 'Offer Letter');
+            return '<a href="' . route('letter.generate.edit', [$row->id]) . '" class="text-darkest-grey openRightModal font-weight-bold">' . e($type) . '</a>';
         })
         ->editColumn('user_id', function($row){
-            return '<a href="' . route('letter.generate.show', [$row->id]) . '" class="text-darkest-grey openRightModal">' . $row->employee_name . '</a>';
+            return '<a href="' . route('letter.generate.edit', [$row->id]) . '" class="text-darkest-grey openRightModal">' . e($row->employee_name) . '</a>';
         });
 
         $datatables->addIndexColumn();
@@ -70,7 +75,7 @@ class LetterDataTable extends BaseDataTable
 
         $datatables->setRowId(fn($row) => 'row-' . $row->id);
 
-        $datatables->rawColumns(['name', 'action', 'created_at', 'user_id', 'template_id']);
+        $datatables->rawColumns(['name', 'action', 'created_at', 'user_id', 'template_id', 'status']);
 
         return $datatables;
     }
@@ -88,15 +93,13 @@ class LetterDataTable extends BaseDataTable
                     $query->whereHas('user', function ($q) {
                         $q->where('name', 'like', '%' . request()->searchText . '%');
                     })
-                    ->orWhereHas('template', function ($q) {
-                            $q->where('title', 'like', '%' . request()->searchText . '%');
-                    })
+                    ->orWhere('name', 'like', '%' . request()->searchText . '%')
                     ->orWhere('description', 'like', '%' . request()->searchText . '%');
                 }
             );
         }
 
-        return $model;
+        return $model->orderBy('id', 'desc');
     }
 
     /**
@@ -127,11 +130,13 @@ class LetterDataTable extends BaseDataTable
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false, 'title' => '#'],
             __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id'), 'visible' => false],
 
-            __('app.menu.employees') => ['data' => 'user_id', 'name' => 'user_id', 'title' => __('app.menu.employees')],
+            __('app.menu.employees') => ['data' => 'user_id', 'name' => 'user_id', 'title' => __('Employee Name')],
 
-            __('letter::app.fields.letterType') => ['data' => 'template_id', 'name' => 'template_id', 'title' => __('letter::app.fields.letterType')],
+            __('letter::app.fields.letterType') => ['data' => 'template_id', 'name' => 'template_id', 'title' => __('Offer Subject / Document')],
 
-            __('app.createdAt') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdAt')],
+            __('Status') => ['data' => 'status', 'name' => 'status', 'title' => __('Status')],
+
+            __('app.createdAt') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Created Date')],
         ];
 
         $action = [

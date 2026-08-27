@@ -710,6 +710,26 @@ trait EmployeeDashboard
 
     public function storeClockIn(ClockInRequest $request)
     {
+        $today = now()->toDateString();
+        $activeAttendance = Attendance::where('user_id', $this->user->id)
+            ->whereDate('clock_in_time', $today)
+            ->whereNull('clock_out_time')
+            ->latest('id')
+            ->first();
+
+        if ($activeAttendance) {
+            return Reply::error(__('You are already checked in.'));
+        }
+
+        $completedToday = Attendance::where('user_id', $this->user->id)
+            ->whereDate('clock_in_time', $today)
+            ->whereNotNull('clock_out_time')
+            ->first();
+
+        if ($completedToday) {
+            return Reply::error(__('You have already completed check-in and check-out for today. Only one check-in per day is allowed.'));
+        }
+
         $now = now($this->company->timezone);
 
         $showClockIn = AttendanceSetting::first();
@@ -720,6 +740,13 @@ trait EmployeeDashboard
         $endTimestamp = now($this->company->timezone)->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
         $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->company->timezone);
         $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->company->timezone);
+
+        if ($this->attendanceSettings && $this->attendanceSettings->shift_name != 'Day Off') {
+            $maxLateLoginCutoff = $officeStartTime->copy()->addMinutes(29)->endOfMinute();
+            if ($now->gt($maxLateLoginCutoff) && !user()->isAdmin()) {
+                return Reply::error(__('Shift login rejected. Late login is allowed only up to 30 minutes after shift start time (until ' . $maxLateLoginCutoff->format('h:i A') . '). Login at ' . $now->format('h:i A') . ' is invalid.'));
+            }
+        }
 
         if ($showClockIn->show_clock_in_button == 'yes') {
             $officeEndTime = now($this->company->timezone);
@@ -847,6 +874,10 @@ trait EmployeeDashboard
 
         $now = now($this->company->timezone);
         $attendance = Attendance::findOrFail($request->id);
+
+        if ($attendance->activeBreak()->exists()) {
+            return Reply::error(__('You are currently on an active break. Please end your break before checking out.'));
+        }
 
         $this->attendanceSettings = attendance_setting();
 

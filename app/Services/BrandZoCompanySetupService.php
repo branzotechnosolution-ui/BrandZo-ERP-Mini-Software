@@ -13,7 +13,7 @@ class BrandZoCompanySetupService
     public static function setupCompanyWorkspace()
     {
         $company = Company::firstOrCreate(
-            ['company_name' => 'BrandZo Techno Solution'],
+            ['company_name' => 'BranZo Techno Solution'],
             ['company_email' => 'contact@brandzo.in', 'status' => 'active']
         );
 

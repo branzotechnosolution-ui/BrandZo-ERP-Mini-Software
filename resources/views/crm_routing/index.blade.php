@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Automated Lead Routing & Assignment Engine 🔀🎯👔🛡️📊</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Automated Lead Routing & Assignment Engine 🔀🎯👔🛡️📊</h2>
         <span class="badge badge-primary px-3 py-2 f-14">142 LEADS ROUTED • VIP TRIGGER > ,000 • 4 ACTIVE RULES</span>
     </div>
 

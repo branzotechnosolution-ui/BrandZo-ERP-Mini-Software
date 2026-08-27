@@ -9,7 +9,7 @@
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4 col-md-9">
         <h5 class="font-weight-bold text-dark mb-3">AGI Strategic Command Prompts:</h5>
         <div class="mb-3">
-            <button class="btn btn-sm btn-outline-primary me-2 mb-2">"How can BrandZo reach M ARR?"</button>
+            <button class="btn btn-sm btn-outline-primary me-2 mb-2">"How can BranZo reach M ARR?"</button>
             <button class="btn btn-sm btn-outline-primary me-2 mb-2">"Which market should we enter?"</button>
             <button class="btn btn-sm btn-outline-primary me-2 mb-2">"Which product should we build next?"</button>
             <button class="btn btn-sm btn-outline-primary me-2 mb-2">"How can we reduce operational cost?"</button>

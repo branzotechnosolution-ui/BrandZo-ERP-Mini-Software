@@ -8,7 +8,7 @@
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
         <h4 class="f-18 font-weight-bold text-dark mb-3">Customer Discussions & Feature Upvoting</h4>
-        <p class="text-muted mb-4">Share best practices, submit product feature requests, and join 50,000+ BrandZo ERP users worldwide.</p>
+        <p class="text-muted mb-4">Share best practices, submit product feature requests, and join 50,000+ BranZo Techno Solution users worldwide.</p>
         <button class="btn btn-primary btn-sm">New Discussion Thread</button>
     </div>
 </div>

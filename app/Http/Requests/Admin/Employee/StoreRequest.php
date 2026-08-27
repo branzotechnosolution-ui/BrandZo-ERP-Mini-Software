@@ -19,6 +19,13 @@ class StoreRequest extends CoreRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'employee_id' => \App\Http\Controllers\EmployeeController::generateNextEmployeeId()
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

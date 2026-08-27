@@ -30,25 +30,140 @@
     .card-body {
         padding: 20px !important;
     }
+    /* Master SaaS CRM Client Navigation Tabs System */
+    .project-header.filter-box,
     .project-header {
+        display: block !important;
+        width: 100% !important;
+        background-color: #FFFFFF !important;
         border-radius: 12px !important;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid #E2E8F0 !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
         margin-bottom: 20px !important;
-        border: 1px solid #F1F5F9 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
-    .project-menu .tabs ul.-primary > li > a {
-        border-bottom: 2px solid transparent !important;
+
+    .project-menu,
+    #mob-client-detail {
+        display: block !important;
+        width: 100% !important;
+        background-color: #FFFFFF !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+
+    nav.tabs {
+        display: block !important;
+        width: 100% !important;
+        background-color: #FFFFFF !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+        padding: 0 8px !important;
+        margin: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    nav.tabs::-webkit-scrollbar {
+        display: none !important;
+        height: 0 !important;
+        width: 0 !important;
+    }
+
+    .project-menu .tabs ul.-primary,
+    nav.tabs ul.-primary {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+        border: none !important;
+        background: transparent !important;
+        width: max-content !important;
+        min-width: 100% !important;
+    }
+
+    .project-menu .tabs ul.-primary::after,
+    .project-menu .tabs ul.-primary::before,
+    nav.tabs::after,
+    nav.tabs::before,
+    .-more,
+    .-secondary {
+        display: none !important;
+        content: none !important;
+    }
+
+    .project-menu .tabs ul.-primary > li,
+    nav.tabs ul.-primary > li {
+        display: inline-flex !important;
+        flex-shrink: 0 !important;
+        margin: 0 2px !important;
+        padding: 0 !important;
+        list-style: none !important;
+        height: 46px !important;
+    }
+
+    .project-menu .tabs ul.-primary > li > a,
+    .project-menu .tabs ul.-primary > li > a.p-sub-menu,
+    .project-menu .tabs ul.-primary > li > a.ajax-tab {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 44px !important;
+        padding: 0 16px !important;
+        font-size: 13px !important;
         font-weight: 600 !important;
         color: #475569 !important;
-        padding: 12px 18px !important;
+        text-decoration: none !important;
+        border: none !important;
+        border-bottom: 3px solid transparent !important;
+        background-color: transparent !important;
         border-radius: 6px 6px 0 0 !important;
-        transition: all 0.2s ease-in-out !important;
+        transition: all 0.15s ease-in-out !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+        position: relative !important;
+        box-sizing: border-box !important;
     }
+
     .project-menu .tabs ul.-primary > li > a:hover,
-    .project-menu .tabs ul.-primary > li > a.active {
-        color: #2563eb !important;
-        border-bottom-color: #2563eb !important;
-        background-color: rgba(37, 99, 235, 0.05) !important;
+    .project-menu .tabs ul.-primary > li > a.p-sub-menu:hover,
+    .project-menu .tabs ul.-primary > li > a.ajax-tab:hover {
+        color: #2563EB !important;
+        background-color: #F8FAFC !important;
+    }
+
+    .project-menu .tabs ul.-primary > li > a.active,
+    .project-menu .tabs ul.-primary > li > a.p-sub-menu.active,
+    .project-menu .tabs ul.-primary > li > a.ajax-tab.active {
+        color: #2563EB !important;
+        border-bottom: 3px solid #2563EB !important;
+        background-color: #EFF6FF !important;
+        font-weight: 700 !important;
+    }
+
+    /* Container Full Width Rule System */
+    #tab-container,
+    .client-detail-wrapper #tab-container {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+    #tab-container > div,
+    #tab-container > .row,
+    #tab-container > .tab-pane,
+    #tab-container > .card,
+    #tab-container > .table-responsive {
+        width: 100% !important;
+        min-width: 100% !important;
     }
 
     .client-badge-row {
@@ -466,7 +581,7 @@ $viewClientOrder = user()->permission('view_order');
 
     <div class="content-wrapper border-top-0 client-detail-wrapper pt-0">
         <!-- TAB CONTENT CONTAINER -->
-        <div class="d-flex flex-grow-1" id="tab-container">
+        <div class="d-flex flex-grow-1 w-100" id="tab-container">
             @include($view)
         </div>
     </div>

@@ -13,7 +13,7 @@ BrandZo ERP is now **Commercial SaaS Launch Ready**. The deployment infrastructu
 
 ### B) Real Company Workspace Setup
 - **Class**: 
-- **Default Company**: "BrandZo Techno Solution"
+- **Default Company**: "BranZo Techno Solution"
 - **Departments Configured**: Engineering, Sales, HR, Finance
 - Default Roles, Admin, Email SMTP & WhatsApp API settings initialized.
 

@@ -3,7 +3,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="f-24 font-weight-bold text-dark mb-0">BrandZo Developer Ecosystem & SDK Marketplace Analytics Dashboard 💻📦🔌🌐🚀</h2>
+        <h2 class="f-24 font-weight-bold text-dark mb-0">BranZo Developer Ecosystem & SDK Marketplace Analytics Dashboard 💻📦🔌🌐🚀</h2>
         <span class="badge badge-success px-3 py-2 f-14">1.48B MONTHLY API CALLS • .40M API REVENUE</span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="bg-white rounded p-4 shadow-sm border-0 mb-4">
-        <h4 class="f-18 font-weight-bold text-dark mb-3">BrandZo AI Enterprise Operating System Developer Ecosystem Engine</h4>
+        <h4 class="f-18 font-weight-bold text-dark mb-3">BranZo AI Enterprise Operating System Developer Ecosystem Engine</h4>
         <p class="text-muted mb-4">12,400 Registered Developers → 7 SDK Languages → 1,280 Published Plugins → 1.48B Monthly API Calls → .4M Revenue → Ecosystem Active.</p>
         <button class="btn btn-primary btn-sm">Generate Instant Enterprise SDK Package & Test Sandbox Environment</button>
     </div>

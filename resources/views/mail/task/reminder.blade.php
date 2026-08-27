@@ -5,9 +5,7 @@
 
 ## @lang('app.taskDetails')
 
-@component('mail::text', ['text' => $content])
-
-@endcomponent
+{!! $content !!}
 
 @component('mail::button', ['url' => $url, 'themeColor' => $themeColor])
 @lang('app.viewTask')

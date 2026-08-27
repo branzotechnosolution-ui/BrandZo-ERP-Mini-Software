@@ -65,6 +65,8 @@
     <x-table class="table-bordered table-hover custom-modules-table" headType="thead-light">
         <x-slot name="thead">
             <th>@lang('app.name')</th>
+            <th>Package / File Name</th>
+            <th>Upload Date</th>
             @if (!$universalBundle)
             <th>@lang('app.purchaseCode')</th>
             @endif
@@ -82,27 +84,21 @@
             {
                 $fetchSetting = config(strtolower($module) . '.setting')::first();
             }
+            $modMeta = $customUploadedData[$key] ?? [];
         @endphp
             <tr>
-                <td><span>{{ $key }}</span>
+                <td><span class="font-weight-bold">{{ $key }}</span>
                     @if (module_enabled('UniversalBundle') && isInstallFromUniversalBundleModule($key))
                     
                             <i class="icon text-info fas fa-info-circle cursor-pointer" data-toggle="tooltip"
                               data-original-title="{{__('universalbundle::app.moduleInfo')}}"></i>
-                    @else
-{{--                        @if ($fetchSetting?->purchase_code && $fetchSetting?->supported_until)--}}
-{{--                            <i class="icon text-info fas fa-info-circle cursor-pointer"--}}
-{{--                            data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"--}}
-{{--                            data-content="@include('custom-modules.sections.support-date')"></i>--}}
-{{--                        @endif--}}
                     @endif
-{{--                    @if ($fetchSetting?->license_type && !(module_enabled('UniversalBundle') && isInstallFromUniversalBundleModule($key)))--}}
-{{--                        <span class="ml-2 badge badge-secondary">{{ $fetchSetting->license_type }}</span>--}}
-{{--                        @if(str_contains($fetchSetting->license_type, 'Regular'))--}}
-{{--                            <a href="{{ \Froiden\Envato\Helpers\FroidenApp::buyExtendedUrl(config(strtolower($module) . '.envato_item_id')) }}"--}}
-{{--                            target="_blank">Upgrade now</a>--}}
-{{--                        @endif--}}
-{{--                    @endif--}}
+                </td>
+                <td>
+                    <code>{{ $modMeta['file_name'] ?? (strtolower($key) . '-module.zip') }}</code>
+                </td>
+                <td>
+                    <span class="text-dark-grey f-13">{{ $modMeta['upload_date'] ?? 'N/A' }}</span>
                 </td>
                 @if (!$universalBundle)
                 <td>
@@ -120,6 +116,8 @@
                         @if ($plugins->where('envato_id', config(strtolower($module) . '.envato_item_id'))->first() && !(module_enabled('UniversalBundle') && isInstallFromUniversalBundleModule($key)))
                             @include('custom-modules.sections.module-update')
                         @endif
+                    @else
+                        <span class="badge badge-info">{{ $modMeta['version'] ?? '1.0.0' }}</span>
                     @endif
 
                 </td>

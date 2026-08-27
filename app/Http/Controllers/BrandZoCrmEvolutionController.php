@@ -9,7 +9,7 @@ class BrandZoCrmEvolutionController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'BrandZo ERP Enterprise CRM Evolution Dashboard';
+        $this->pageTitle = 'BranZo Techno Solution Enterprise CRM Evolution Dashboard';
     }
 
     public function index()
